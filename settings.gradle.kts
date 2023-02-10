@@ -11,3 +11,12 @@ pluginManagement {
     }
 }
 rootProject.name = "saas"
+
+include("app:property")
+include("app:common")
+include("app:admin")
+include("app:alpha")
+include("app:portal")
+include("saas-model")
+include("saas-core")
+include("saas-util")
