@@ -1,4 +1,6 @@
 .idea
+application-*.yml
+application-*.yaml
 # Gradle
 .gradle/
 build/

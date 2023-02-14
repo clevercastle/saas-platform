@@ -1,5 +1,6 @@
 quarkus:
     hibernate-orm:
+        physical-naming-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
         database:
             generation: none
         log:

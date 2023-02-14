@@ -1,43 +1,57 @@
-CREATE TABLE "users" (
-    id char(64) NOT NULL PRIMARY KEY,
-    default_tenant_id char(64) NOT NULL,
-    email char(255) NOT NULL,
-    created_at timestamp,
-    updated_at timestamp,
-    created_by char(64),
-    updated_by char(64)
+CREATE TABLE "users"
+(
+    id                varchar(64) NOT NULL PRIMARY KEY,
+    default_tenant_id varchar(64) NOT NULL,
+    email             text        NOT NULL,
+    password          text        NOT NULL,
+    created_at        timestamp,
+    updated_at        timestamp,
+    created_by        varchar(64),
+    updated_by        varchar(64)
 );
-CREATE INDEX user_idx_tenant_id ON "users"(default_tenant_id);
 
-CREATE TABLE user_oidc_mapping (
-    id SERIAL NOT NULL PRIMARY KEY,
-    user_id char(64) NOT NULL,
-    user_sub char(64) NOT NULL,
+CREATE TABLE refresh_tokens
+(
+    id            BIGSERIAL                   NOT NULL PRIMARY KEY,
+    user_id       INTEGER                     NOT NULL,
+    refresh_token TEXT                        NOT NULL,
+    created_at    TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    expires_at    TIMESTAMP WITHOUT TIME ZONE NOT NULL
+);
+
+
+CREATE TABLE user_oidc_mapping
+(
+    id         varchar(64) NOT NULL PRIMARY KEY,
+    user_id    bpchar(64)  NOT NULL,
+    user_sub   text        NOT NULL,
     created_at timestamp,
     updated_at timestamp,
-    created_by char(64),
-    updated_by char(64)
+    created_by varchar(64),
+    updated_by varchar(64)
 );
 CREATE INDEX user_oidc_mapping_idx_user_sub ON user_oidc_mapping(user_sub);
 
-CREATE TABLE tenant (
-    id char(64) NOT NULL PRIMARY KEY,
-    name char(255) NOT NULL,
+CREATE TABLE tenant
+(
+    id         varchar(64) NOT NULL PRIMARY KEY,
+    name       text        NOT NULL,
     created_at timestamp,
     updated_at timestamp,
-    created_by char(64),
-    updated_by char(64)
+    created_by varchar(64),
+    updated_by varchar(64)
 );
 
-CREATE TABLE user_tenant_mapping (
-    id SERIAL NOT NULL PRIMARY KEY,
-    user_id char(64) NOT NULL,
-    tenant_id char(64) NOT NULL,
-    role char(16) NOT NULL,
-    tenant_user_id char(64) NOT NULL,
-    tenant_user_name char(255) NOT NULL, /* user name in the tenant */
-    created_at timestamp,
-    updated_at timestamp,
-    created_by char(64),
-    updated_by char(64)
+CREATE TABLE user_tenant_mapping
+(
+    id               varchar(64) NOT NULL PRIMARY KEY,
+    user_id          varchar(64) NOT NULL,
+    tenant_id        varchar(64) NOT NULL,
+    role             varchar(32) NULL,
+    tenant_user_id   varchar(64) NOT NULL,
+    tenant_user_name text        NOT NULL, /* user name in the tenant */
+    created_at       timestamp,
+    updated_at       timestamp,
+    created_by       varchar(64),
+    updated_by       varchar(64)
 );

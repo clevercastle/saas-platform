@@ -1,8 +1,11 @@
 package org.clevercastle.saas.core.model.account
 
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheCompanionBase
+import io.quarkus.hibernate.orm.panache.kotlin.PanacheRepository
 import org.clevercastle.saas.core.model.BaseEntity
-import java.util.UUID
+import org.clevercastle.saas.core.model.EntityPrefix
+import java.util.*
+import javax.enterprise.context.ApplicationScoped
 import javax.persistence.Entity
 import javax.persistence.Id
 
@@ -11,6 +14,9 @@ class TenantEntity : BaseEntity() {
     companion object : PanacheCompanionBase<TenantEntity, String>
 
     @Id
-    var id: String = "user_${UUID.randomUUID()}"
+    var id: String = "${EntityPrefix.tenant}${UUID.randomUUID()}"
     var name: String? = null
 }
+
+@ApplicationScoped
+class TenantEntityRepository : PanacheRepository<TenantEntity>
