@@ -4,43 +4,22 @@ import com.auth0.client.auth.AuthAPI
 import com.auth0.exception.APIException
 import org.clevercastle.saas.core.jwt.TokenHolder
 import org.clevercastle.saas.util.TimeUtils
-import org.eclipse.microprofile.config.inject.ConfigProperty
-import javax.annotation.PostConstruct
-import javax.enterprise.context.ApplicationScoped
 
-@ApplicationScoped
-class IAMServiceAuth0 : IAMService {
+class IAMServiceAuth0(
+        private val auth0Audience: String,
+        private val auth0Scope: String,
+        private val auth0Connection: String,
+        auth0Domain: String,
+        auth0ClientId: String,
+        auth0ClientSecret: String
+) : IAMService {
+    private val auth: AuthAPI = AuthAPI(
+            auth0Domain,
+            auth0ClientId,
+            auth0ClientSecret
+    )
 
-    @ConfigProperty(name = "saas.iam.auth0.domain")
-    private lateinit var auth0Domain: String
-
-    @ConfigProperty(name = "saas.iam.auth0.audience")
-    private lateinit var auth0Audience: String
-
-    @ConfigProperty(name = "saas.iam.auth0.clientId")
-    private lateinit var auth0ClientId: String
-
-    @ConfigProperty(name = "saas.iam.auth0.clientSecret")
-    private lateinit var auth0ClientSecret: String
-
-    @ConfigProperty(name = "saas.iam.auth0.scope", defaultValue = "openid profile email offline_access")
-    private lateinit var auth0Scope: String
-
-    @ConfigProperty(name = "saas.iam.auth0.connection", defaultValue = "Username-Password-Authentication")
-    private lateinit var auth0Connection: String
-
-    private lateinit var auth: AuthAPI
-
-    @PostConstruct
-    fun init() {
-        auth = AuthAPI(
-                auth0Domain,
-                auth0ClientId,
-                auth0ClientSecret
-        )
-    }
-
-    override fun registerUser(email: String, password: String, params: Map<String, Any>): IdentityServerUser? {
+    override fun registerUser(email: String, password: String, params: Map<String, Any>): IdentityServerUser {
         try {
             val createdUser = auth.signUp(email, password.toCharArray(), "Username-Password-Authentication")
                     .execute()

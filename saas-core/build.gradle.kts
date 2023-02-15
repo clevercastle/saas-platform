@@ -1,3 +1,8 @@
+configurations {
+    all {
+        exclude("org.eclipse.microprofile.config:microprofile-config-api")
+    }
+}
 dependencies {
     implementation(project(":saas-model"))
     implementation(project(":saas-util"))

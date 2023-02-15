@@ -13,3 +13,16 @@ quarkus:
         jdbc:
             url: jdbc:postgresql://localhost:25432/postgres
             max-size: 10
+    security:
+        deny-unannotated-endpoints: true
+        jaxrs:
+            default-roles-allowed: user
+
+saas:
+    iam:
+        auth0:
+            domain: dev-saas-platform.us.auth0.com
+            issuer: https://dev-saas-platform.us.auth0.com/
+            audience: https://dev-saas-platform.us.auth0.com/api/v2/
+            clientId: HXdVWf2SpkjhnwqZppZTm2AXDSQVrlAJ
+            clientSecret: QV54zoCSxuVBW-IfHrhPku_BID4GhVKfb087uIsXJxN3LMJ8zESYLdLWVVqRWmkB
