@@ -34,7 +34,7 @@ class SaasJWTAuhMechanism : HttpAuthenticationMechanism {
 
     override fun authenticate(context: RoutingContext?, identityProviderManager: IdentityProviderManager?): Uni<SecurityIdentity> {
         val headerAuthorization = context!!.request().headers().get(AUTHORIZATION_HEADER)
-        if (headerAuthorization.startsWith(BEARER_SCHEME_PREFIX)) {
+        if (headerAuthorization != null && headerAuthorization.startsWith(BEARER_SCHEME_PREFIX)) {
             val jwtToken = context.request().headers().get(AUTHORIZATION_HEADER).substring(BEARER_SCHEME_PREFIX.length)
             if (StringUtils.isNotBlank(jwtToken)) {
                 return identityProviderManager!!.authenticate(HttpSecurityUtils.setRoutingContextAttribute(

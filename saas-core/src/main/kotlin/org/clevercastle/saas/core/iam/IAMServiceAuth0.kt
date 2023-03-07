@@ -23,7 +23,7 @@ class IAMServiceAuth0(
         try {
             val createdUser = auth.signUp(email, password.toCharArray(), "Username-Password-Authentication")
                     .execute()
-            return Auth0User(createdUser.email, createdUser.userId, createdUser.userId)
+            return Auth0User(createdUser.email, Auth0User.genUserSub(createdUser.userId), createdUser.userId)
         } catch (e: APIException) {
             when (e.error) {
                 "invalid_password" -> {
