@@ -29,4 +29,8 @@ class UserTenantMappingEntity : BaseEntity() {
 }
 
 @ApplicationScoped
-class UserTenantMappingEntityRepository : PanacheRepository<UserTenantMappingEntity>
+class UserTenantMappingEntityRepository : PanacheRepository<UserTenantMappingEntity> {
+    fun listTenant(userId: String): List<UserTenantMappingEntity> {
+        return list("user_id", userId)
+    }
+}

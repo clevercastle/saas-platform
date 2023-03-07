@@ -29,7 +29,7 @@ class AuthResource {
     @Transactional
     fun registerUser(@Valid req: RegisterUserReq): UserVO {
         val user = authService.register(req.email!!, req.password!!, req.name!!)
-        return UserVO.converter.fromUser(user)
+        return UserVO.fromUser(user)
     }
 
     @PermitAll

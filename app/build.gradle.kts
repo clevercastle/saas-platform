@@ -9,6 +9,7 @@ subprojects {
             implementation("com.auth0:jwks-rsa:0.22.0")
             implementation("io.quarkus:quarkus-smallrye-jwt")
             implementation("io.quarkus:quarkus-security")
+            compileOnly("io.quarkus:quarkus-hibernate-orm-panache-kotlin")
         }
     }
     if (!"common".equals(name)) {

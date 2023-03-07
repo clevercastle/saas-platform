@@ -43,7 +43,7 @@ class AuthService {
         userRepository.persist(userEntity)
         userOIDCMappingRepository.persist(userOIDCMapping)
         tenantService.createTenant(userEntity.id, "Default Tenant", "name", true)
-        return User.converter.fromUserEntity(userEntity)!!
+        return User.fromUserEntity(userEntity)!!
     }
 
     fun login(email: String, password: String): TokenHolder {

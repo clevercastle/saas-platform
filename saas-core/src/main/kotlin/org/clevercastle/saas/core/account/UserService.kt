@@ -25,6 +25,6 @@ class UserService {
 
     @ActivateRequestContext
     fun getUserByUserId(userId: String): User? {
-        return User.converter.fromUserEntity(userRepository.findById(userId))
+        return User.fromUserEntity(userRepository.findById(userId))
     }
 }

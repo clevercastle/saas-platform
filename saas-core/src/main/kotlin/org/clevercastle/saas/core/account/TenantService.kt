@@ -15,7 +15,7 @@ class TenantService {
     private lateinit var tenantEntityRepository: TenantEntityRepository
 
     @Transactional
-    fun createTenant(userId: String, tenantName: String, tenantUserName: String, isUserDefaultTenant: Boolean) {
+    fun createTenant(userId: String, tenantName: String, tenantUserName: String, isUserDefaultTenant: Boolean): Tenant {
         var tenantId = EntityUtil.genTenantId()
         var tenantUserId = EntityUtil.genTenantUserId()
         if (isUserDefaultTenant) {
@@ -38,5 +38,15 @@ class TenantService {
 
         tenantEntityRepository.persist(tenantEntity)
         userTenantMappingEntityRepository.persist(userTenantMappingEntity)
+        return Tenant.fromTenantEntity(tenantEntity)
+    }
+
+    fun listUserTenant(userId: String): List<UserTenant> {
+        val mappings = userTenantMappingEntityRepository.listTenant(userId)
+        val tenants = tenantEntityRepository.listTenant(mappings.map { it.tenantId })
+        return mappings.map { mapping ->
+            val tenant = tenants.find { it.id == mapping.tenantId }
+            UserTenant.fromUserTenantMappingEntity(mapping, tenant!!.name!!)
+        }
     }
 }

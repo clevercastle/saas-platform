@@ -18,4 +18,8 @@ class TenantEntity : BaseEntity() {
 }
 
 @ApplicationScoped
-class TenantEntityRepository : PanacheRepository<TenantEntity>
+class TenantEntityRepository : PanacheRepository<TenantEntity> {
+    fun listTenant(ids: List<String>): List<TenantEntity> {
+        return list("id in ?1", ids)
+    }
+}
