@@ -1,12 +1,12 @@
 CREATE TABLE "users"
 (
-    id                varchar(64) NOT NULL PRIMARY KEY,
-    default_tenant_id varchar(64) NOT NULL,
-    email             text        NOT NULL,
-    created_at        timestamp,
-    updated_at        timestamp,
-    created_by        varchar(64),
-    updated_by        varchar(64)
+    id                   varchar(64) NOT NULL PRIMARY KEY,
+    default_workspace_id varchar(64) NOT NULL,
+    email                text        NOT NULL,
+    created_at           timestamp,
+    updated_at           timestamp,
+    created_by           varchar(64),
+    updated_by           varchar(64)
 );
 
 
@@ -23,7 +23,7 @@ CREATE TABLE user_oidc_mapping
 );
 CREATE INDEX user_oidc_mapping_idx_user_sub ON user_oidc_mapping (user_sub);
 
-CREATE TABLE tenant
+CREATE TABLE workspace
 (
     id         varchar(64) NOT NULL PRIMARY KEY,
     name       text        NOT NULL,
@@ -33,16 +33,16 @@ CREATE TABLE tenant
     updated_by varchar(64)
 );
 
-CREATE TABLE user_tenant_mapping
+CREATE TABLE user_workspace_mapping
 (
-    id               varchar(64) NOT NULL PRIMARY KEY,
-    user_id          varchar(64) NOT NULL,
-    tenant_id        varchar(64) NOT NULL,
-    role             varchar(32) NULL,
-    tenant_user_id   varchar(64) NOT NULL,
-    tenant_user_name text        NOT NULL, /* user name in the tenant */
-    created_at       timestamp,
-    updated_at       timestamp,
-    created_by       varchar(64),
-    updated_by       varchar(64)
+    id                  varchar(64) NOT NULL PRIMARY KEY,
+    user_id             varchar(64) NOT NULL,
+    workspace_id        varchar(64) NOT NULL,
+    role                varchar(32) NULL,
+    workspace_user_id   varchar(64) NOT NULL,
+    workspace_user_name text        NOT NULL, /* user name in the workspace */
+    created_at          timestamp,
+    updated_at          timestamp,
+    created_by          varchar(64),
+    updated_by          varchar(64)
 );

@@ -17,7 +17,7 @@ class AuthService {
     private lateinit var userOIDCMappingRepository: UserOIDCMappingRepository
 
     @Inject
-    private lateinit var tenantService: TenantService
+    private lateinit var workspaceService: WorkspaceService
 
     @Inject
     private lateinit var iamService: IAMService
@@ -25,14 +25,14 @@ class AuthService {
     /**
      *  1. create user in auth0...
      *  2. create user in table
-     *  3 create default tenant for the user
+     *  3 create default workspace for the user
      *
      */
     @Transactional
     fun register(email: String, password: String, name: String): User {
         val identityServerUser = iamService.registerUser(email, password, mapOf())
         val userEntity = UserEntity().apply {
-            this.defaultTenantId = EntityUtil.genTenantId(EntityUtil.retrieve(this.id))
+            this.defaultWorkspaceId = EntityUtil.genWorkspaceId(EntityUtil.retrieve(this.id))
             this.email = email
         }
         val userOIDCMapping = UserOIDCMapping().apply {
@@ -42,7 +42,7 @@ class AuthService {
         }
         userRepository.persist(userEntity)
         userOIDCMappingRepository.persist(userOIDCMapping)
-        tenantService.createTenant(userEntity.id, "Default Tenant", "name", true)
+        workspaceService.createWorkspace(userEntity.id, "Default workspace", "name", true)
         return User.fromUserEntity(userEntity)!!
     }
 

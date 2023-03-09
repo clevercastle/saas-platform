@@ -15,7 +15,7 @@ class UserService {
     private lateinit var userOIDCMappingRepository: UserOIDCMappingRepository
 
     @Inject
-    private lateinit var tenantService: TenantService
+    private lateinit var workspaceService: WorkspaceService
 
 
     @ActivateRequestContext

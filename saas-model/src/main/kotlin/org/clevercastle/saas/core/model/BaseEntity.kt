@@ -16,24 +16,24 @@ open class BaseEntity : PanacheEntityBase {
 class EntityUtil {
     companion object {
         const val user = "user_"
-        const val tenant = "tenant_"
-        const val userTenantMapping = "utm_"
-        const val tenantUser = "tu_"
+        const val workspace = "workspace_"
+        const val userWorkspaceMapping = "uwm_"
+        const val workspaceUser = "wu_"
 
         fun genUserId(randomPart: String = UUID.randomUUID().toString()): String {
             return "${user}${randomPart}"
         }
 
-        fun genTenantId(randomPart: String = UUID.randomUUID().toString()): String {
-            return "${tenant}${randomPart}"
+        fun genWorkspaceId(randomPart: String = UUID.randomUUID().toString()): String {
+            return "${workspace}${randomPart}"
         }
 
-        fun genUserTenantMappingId(randomPart: String = UUID.randomUUID().toString()): String {
-            return "${userTenantMapping}${randomPart}"
+        fun genUserWorkspaceMappingId(randomPart: String = UUID.randomUUID().toString()): String {
+            return "${userWorkspaceMapping}${randomPart}"
         }
 
-        fun genTenantUserId(randomPart: String = UUID.randomUUID().toString()): String {
-            return "${tenantUser}${randomPart}"
+        fun genWorkspaceUserId(randomPart: String = UUID.randomUUID().toString()): String {
+            return "${workspaceUser}${randomPart}"
         }
 
         fun retrieve(id: String): String {

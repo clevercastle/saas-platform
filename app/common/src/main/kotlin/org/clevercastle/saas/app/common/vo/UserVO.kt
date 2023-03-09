@@ -7,13 +7,13 @@ class UserVO {
         fun fromUser(user: User): UserVO {
             return UserVO().apply {
                 this.id = user.id
-                this.defaultTenantId = user.defaultTenantId
+                this.defaultWorkspaeId = user.defaultWorkspaceId
                 this.email = user.email
             }
         }
     }
 
     lateinit var id: String
-    lateinit var defaultTenantId: String
+    lateinit var defaultWorkspaeId: String
     lateinit var email: String
 }

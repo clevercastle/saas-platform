@@ -8,18 +8,18 @@ import javax.enterprise.context.ApplicationScoped
 import javax.persistence.Entity
 import javax.persistence.Id
 
-@Entity(name = "tenant")
-class TenantEntity : BaseEntity() {
-    companion object : PanacheCompanionBase<TenantEntity, String>
+@Entity(name = "workspace")
+class WorkspaceEntity : BaseEntity() {
+    companion object : PanacheCompanionBase<WorkspaceEntity, String>
 
     @Id
-    var id: String = EntityUtil.genTenantId()
+    var id: String = EntityUtil.genWorkspaceId()
     var name: String? = null
 }
 
 @ApplicationScoped
-class TenantEntityRepository : PanacheRepository<TenantEntity> {
-    fun listTenant(ids: List<String>): List<TenantEntity> {
+class WorkspaceEntityRepository : PanacheRepository<WorkspaceEntity> {
+    fun listWorkspaces(ids: List<String>): List<WorkspaceEntity> {
         return list("id in ?1", ids)
     }
 }

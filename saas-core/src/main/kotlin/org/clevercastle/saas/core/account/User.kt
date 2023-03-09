@@ -10,24 +10,24 @@ class User {
             }
             return User().apply {
                 this.id = user.id
-                this.defaultTenantId = user.defaultTenantId
+                this.defaultWorkspaceId = user.defaultWorkspaceId
                 this.email = user.email
             }
         }
 
-        fun fromUserEntityWithTenants(user: UserEntity,
-                                      tenants: List<Tenant>): User {
+        fun fromUserEntityWithWorkspace(user: UserEntity,
+                                        workspaces: List<Workspace>): User {
             return User().apply {
                 this.id = user.id
-                this.defaultTenantId = user.defaultTenantId
+                this.defaultWorkspaceId = user.defaultWorkspaceId
                 this.email = user.email
-                this.tenants.addAll(tenants)
+                this.workspaces.addAll(workspaces)
             }
         }
     }
 
     lateinit var id: String
-    lateinit var defaultTenantId: String
+    lateinit var defaultWorkspaceId: String
     lateinit var email: String
-    val tenants = mutableListOf<Tenant>()
+    val workspaces = mutableListOf<Workspace>()
 }

@@ -20,7 +20,7 @@ class UserEntity : BaseEntity() {
 
     @Id
     var id: String = EntityUtil.genUserId()
-    lateinit var defaultTenantId: String
+    lateinit var defaultWorkspaceId: String
     lateinit var email: String
 }
 
