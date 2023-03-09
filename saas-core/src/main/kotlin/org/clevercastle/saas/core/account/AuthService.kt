@@ -42,7 +42,6 @@ class AuthService {
         }
         userRepository.persist(userEntity)
         userOIDCMappingRepository.persist(userOIDCMapping)
-        workspaceService.createWorkspace(userEntity.id, "Default workspace", "name", true)
         return User.fromUserEntity(userEntity)!!
     }
 

@@ -1,8 +1,8 @@
 package org.clevercastle.saas.app.common.vo
 
-import org.clevercastle.saas.core.account.UserWorkspace
 import org.clevercastle.saas.core.account.Workspace
-import org.clevercastle.saas.core.model.account.UserWorkspaceRole
+import org.clevercastle.saas.core.account.WorkspaceUser
+import org.clevercastle.saas.core.model.account.WorkspaceUserRole
 
 class WorkspaceVO {
     companion object {
@@ -20,13 +20,13 @@ class WorkspaceVO {
 
 class UserWorkspaceVO {
     companion object {
-        fun fromUserWorkspace(userWorkspace: UserWorkspace): UserWorkspaceVO {
+        fun fromUserWorkspace(workspaceUser: WorkspaceUser): UserWorkspaceVO {
             return UserWorkspaceVO().apply {
-                this.workspaceId = userWorkspace.workspaceId
-                this.workspaceName = userWorkspace.workspaceName
-                this.workspaceUserId = userWorkspace.workspaceUserId
-                this.workspaceUserName = userWorkspace.workspaceUserName
-                this.role = userWorkspace.role
+                this.workspaceId = workspaceUser.workspaceId
+                this.workspaceName = workspaceUser.workspaceName
+                this.workspaceUserId = workspaceUser.workspaceUserId
+                this.workspaceUserName = workspaceUser.workspaceUserName
+                this.role = workspaceUser.role
             }
         }
     }
@@ -35,5 +35,5 @@ class UserWorkspaceVO {
     lateinit var workspaceName: String
     lateinit var workspaceUserId: String
     lateinit var workspaceUserName: String
-    lateinit var role: UserWorkspaceRole
+    lateinit var role: WorkspaceUserRole
 }

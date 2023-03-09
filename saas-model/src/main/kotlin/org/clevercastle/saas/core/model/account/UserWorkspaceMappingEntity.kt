@@ -6,13 +6,25 @@ import org.clevercastle.saas.core.model.BaseEntity
 import org.clevercastle.saas.core.model.EntityUtil
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
+import javax.persistence.AttributeConverter
+import javax.persistence.Convert
 import javax.persistence.Entity
 import javax.persistence.Id
 
-enum class UserWorkspaceRole {
+enum class WorkspaceUserRole {
     Admin,
     Maintain,
     NormalUser
+}
+
+class WorkspaceUserRoleHibernateConverter : AttributeConverter<WorkspaceUserRole, String> {
+    override fun convertToDatabaseColumn(attribute: WorkspaceUserRole?): String {
+        return attribute!!.name
+    }
+
+    override fun convertToEntityAttribute(dbData: String?): WorkspaceUserRole {
+        return WorkspaceUserRole.valueOf(dbData!!)
+    }
 }
 
 @Entity(name = "user_workspace_mapping")
@@ -25,7 +37,9 @@ class UserWorkspaceMappingEntity : BaseEntity() {
     lateinit var workspaceId: String
     lateinit var workspaceUserId: String
     lateinit var workspaceUserName: String
-    lateinit var role: UserWorkspaceRole
+
+    @field:Convert(converter = WorkspaceUserRoleHibernateConverter::class)
+    lateinit var role: WorkspaceUserRole
 }
 
 @ApplicationScoped

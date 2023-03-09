@@ -6,12 +6,24 @@ import org.clevercastle.saas.core.model.BaseEntity
 import org.clevercastle.saas.core.model.EntityUtil
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
+import javax.persistence.AttributeConverter
+import javax.persistence.Convert
 import javax.persistence.Entity
 import javax.persistence.Id
 
 enum class OidcProvider {
     Auth0,
     Cognito
+}
+
+class OidcProviderHibernateConverter : AttributeConverter<OidcProvider, String> {
+    override fun convertToDatabaseColumn(attribute: OidcProvider?): String {
+        return attribute!!.name
+    }
+
+    override fun convertToEntityAttribute(dbData: String?): OidcProvider {
+        return OidcProvider.valueOf(dbData!!)
+    }
 }
 
 @Entity(name = "users")
@@ -31,6 +43,8 @@ class UserOIDCMapping : BaseEntity() {
     var id: String = UUID.randomUUID().toString()
     lateinit var userId: String
     lateinit var userSub: String
+
+    @field:Convert(converter = OidcProviderHibernateConverter::class)
     lateinit var oidcProvider: OidcProvider
 }
 

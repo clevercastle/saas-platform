@@ -18,7 +18,7 @@ class EntityUtil {
         const val user = "user_"
         const val workspace = "workspace_"
         const val userWorkspaceMapping = "uwm_"
-        const val workspaceUser = "wu_"
+        const val workspaceUser = "wuser_"
 
         fun genUserId(randomPart: String = UUID.randomUUID().toString()): String {
             return "${user}${randomPart}"

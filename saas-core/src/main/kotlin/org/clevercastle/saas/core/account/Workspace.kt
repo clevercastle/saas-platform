@@ -1,8 +1,8 @@
 package org.clevercastle.saas.core.account
 
 import org.clevercastle.saas.core.model.account.UserWorkspaceMappingEntity
-import org.clevercastle.saas.core.model.account.UserWorkspaceRole
 import org.clevercastle.saas.core.model.account.WorkspaceEntity
+import org.clevercastle.saas.core.model.account.WorkspaceUserRole
 
 class Workspace {
     companion object {
@@ -29,10 +29,10 @@ class Workspace {
     val userWorkspaces = mutableMapOf<String, UserWorkspaceMapping>()
 }
 
-class UserWorkspace {
+class WorkspaceUser {
     companion object {
-        fun fromUserWorkspaceMappingEntity(mapping: UserWorkspaceMappingEntity, workspaceName: String): UserWorkspace {
-            return UserWorkspace().apply {
+        fun fromUserWorkspaceMappingEntity(mapping: UserWorkspaceMappingEntity, workspaceName: String): WorkspaceUser {
+            return WorkspaceUser().apply {
                 this.workspaceName = workspaceName
                 this.workspaceId = mapping.workspaceId
                 this.workspaceUserId = mapping.workspaceUserId
@@ -42,11 +42,11 @@ class UserWorkspace {
         }
     }
 
+    lateinit var workspaceUserId: String
     lateinit var workspaceId: String
     lateinit var workspaceName: String
-    lateinit var workspaceUserId: String
     lateinit var workspaceUserName: String
-    lateinit var role: UserWorkspaceRole
+    lateinit var role: WorkspaceUserRole
 }
 
 class UserWorkspaceMapping {
@@ -68,5 +68,5 @@ class UserWorkspaceMapping {
     lateinit var workspaceId: String
     lateinit var workspaceUserId: String
     lateinit var workspaceUserName: String
-    lateinit var role: UserWorkspaceRole
+    lateinit var role: WorkspaceUserRole
 }

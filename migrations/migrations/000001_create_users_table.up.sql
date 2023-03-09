@@ -38,7 +38,7 @@ CREATE TABLE user_workspace_mapping
     id                  varchar(64) NOT NULL PRIMARY KEY,
     user_id             varchar(64) NOT NULL,
     workspace_id        varchar(64) NOT NULL,
-    role                varchar(32) NULL,
+    "role"              varchar(32) NULL,
     workspace_user_id   varchar(64) NOT NULL,
     workspace_user_name text        NOT NULL, /* user name in the workspace */
     created_at          timestamp,
@@ -46,3 +46,5 @@ CREATE TABLE user_workspace_mapping
     created_by          varchar(64),
     updated_by          varchar(64)
 );
+
+create unique index user_workspace_mapping_idx_user_id_workspace_id on user_workspace_mapping (user_id, workspace_id);
