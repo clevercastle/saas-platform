@@ -15,27 +15,6 @@ open class BaseEntity : PanacheEntityBase {
 
 class EntityUtil {
     companion object {
-        const val user = "user_"
-        const val workspace = "workspace_"
-        const val userWorkspaceMapping = "uwm_"
-        const val workspaceUser = "wuser_"
-
-        fun genUserId(randomPart: String = UUID.randomUUID().toString()): String {
-            return "${user}${randomPart}"
-        }
-
-        fun genWorkspaceId(randomPart: String = UUID.randomUUID().toString()): String {
-            return "${workspace}${randomPart}"
-        }
-
-        fun genUserWorkspaceMappingId(randomPart: String = UUID.randomUUID().toString()): String {
-            return "${userWorkspaceMapping}${randomPart}"
-        }
-
-        fun genWorkspaceUserId(randomPart: String = UUID.randomUUID().toString()): String {
-            return "${workspaceUser}${randomPart}"
-        }
-
         fun retrieve(id: String): String {
             val res = id.split("_")
             return when (res.size) {
@@ -52,5 +31,26 @@ class EntityUtil {
                 }
             }
         }
+
+        class Account {
+            companion object {
+                const val user = "user_"
+                const val workspace = "workspace_"
+                const val userWorkspaceMapping = "uwm_"
+                const val workspaceUser = "wuser_"
+                fun genUserId(randomPart: String = UUID.randomUUID().toString()): String {
+                    return "${user}${randomPart}"
+                }
+
+                fun genWorkspaceId(randomPart: String = UUID.randomUUID().toString()): String {
+                    return "${workspace}${randomPart}"
+                }
+
+                fun genWorkspaceUserId(randomPart: String = UUID.randomUUID().toString()): String {
+                    return "${workspaceUser}${randomPart}"
+                }
+            }
+        }
+
     }
 }

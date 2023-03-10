@@ -18,8 +18,8 @@ class WorkspaceService {
 
     @Transactional
     fun createWorkspace(userId: String, workspaceName: String, workspaceUserName: String): Workspace {
-        val workspaceId = EntityUtil.genWorkspaceId()
-        val workspaceUserId = EntityUtil.genWorkspaceUserId()
+        val workspaceId = EntityUtil.Companion.Account.genWorkspaceId()
+        val workspaceUserId = EntityUtil.Companion.Account.genWorkspaceUserId()
         val workspaceEntity = WorkspaceEntity().apply {
             this.id = workspaceId
             this.name = workspaceName
@@ -52,7 +52,7 @@ class WorkspaceService {
         val userWorkspaceMappingEntity = UserWorkspaceMappingEntity().apply {
             this.workspaceId = workspaceId
             this.userId = userId
-            this.workspaceUserId = EntityUtil.genWorkspaceUserId()
+            this.workspaceUserId = EntityUtil.Companion.Account.genWorkspaceUserId()
             this.workspaceUserName = pWorkspaceUsername
             this.role = role
         }

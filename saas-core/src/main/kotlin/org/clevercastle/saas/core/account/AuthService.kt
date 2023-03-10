@@ -32,7 +32,7 @@ class AuthService {
     fun register(email: String, password: String, name: String): User {
         val identityServerUser = iamService.registerUser(email, password, mapOf())
         val userEntity = UserEntity().apply {
-            this.defaultWorkspaceId = EntityUtil.genWorkspaceId(EntityUtil.retrieve(this.id))
+            this.defaultWorkspaceId = EntityUtil.Companion.Account.genWorkspaceId(EntityUtil.retrieve(this.id))
             this.email = email
         }
         val userOIDCMapping = UserOIDCMapping().apply {
