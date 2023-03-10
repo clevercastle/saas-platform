@@ -10,6 +10,7 @@ subprojects {
             implementation("io.quarkus:quarkus-smallrye-jwt")
             implementation("io.quarkus:quarkus-security")
             compileOnly("io.quarkus:quarkus-hibernate-orm-panache-kotlin")
+            compileOnly("io.quarkus:quarkus-resteasy")
         }
     }
     if (!"common".equals(name)) {

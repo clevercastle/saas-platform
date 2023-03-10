@@ -8,6 +8,7 @@ import org.clevercastle.saas.app.portal.model.request.CreateWorkspaceReq
 import org.clevercastle.saas.app.portal.model.request.JoinWorkspaceReq
 import org.clevercastle.saas.core.account.UserService
 import org.clevercastle.saas.core.account.WorkspaceService
+import org.clevercastle.saas.core.exception.HttpResponseException
 import org.clevercastle.saas.core.model.account.WorkspaceUserRole
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
@@ -57,7 +58,7 @@ class AccountResource {
         try {
             workspaceService.joinWorkspace(userId, req.workspaceId!!, req.workspaceUserName!!, WorkspaceUserRole.valueOf(req.workspaceUserRole!!))
         } catch (e: RollbackException) {
-            throw BadRequestException("User is already in workspace.")
+            throw HttpResponseException(httpStatus = 400, message = "User is already in workspace.")
         }
         return listOf()
     }

@@ -18,7 +18,6 @@ class EnumValidatorImpl : ConstraintValidator<EnumValidator, String> {
         val method = try {
             enumClazz.java.getMethod(constraintAnnotation.method)
         } catch (ex: NoSuchMethodException) {
-            // TODO: change exception type
             throw RuntimeException(ex)
         }
         try {
