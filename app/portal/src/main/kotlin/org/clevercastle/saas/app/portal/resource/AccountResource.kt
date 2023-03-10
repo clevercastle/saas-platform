@@ -6,6 +6,7 @@ import org.clevercastle.saas.app.common.vo.UserWorkspaceVO
 import org.clevercastle.saas.app.common.vo.WorkspaceVO
 import org.clevercastle.saas.app.portal.model.request.CreateWorkspaceReq
 import org.clevercastle.saas.app.portal.model.request.JoinWorkspaceReq
+import org.clevercastle.saas.core.account.PermissionService
 import org.clevercastle.saas.core.account.UserService
 import org.clevercastle.saas.core.account.WorkspaceService
 import org.clevercastle.saas.core.internal.exception.HttpResponseException
@@ -17,6 +18,7 @@ import javax.transaction.RollbackException
 import javax.validation.Valid
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
+import javax.ws.rs.core.Response
 
 @Path("portal")
 @ApplicationScoped
@@ -31,6 +33,9 @@ class AccountResource {
 
     @Inject
     private lateinit var workspaceService: WorkspaceService
+
+    @Inject
+    private lateinit var permissionService: PermissionService
 
     @GET
     @Path("account")
@@ -54,26 +59,28 @@ class AccountResource {
 
     @PUT
     @Path("workspace/join")
-    fun joinWorkspace(@Valid req: JoinWorkspaceReq) {
-        // TODO: check if principal is the admin of the workspace
+    fun joinWorkspace(@Valid req: JoinWorkspaceReq): Response {
+        permissionService.canAccessWorkspace(securityService.getUserId(), req.workspaceId!!, listOf(WorkspaceUserRole.Admin))
         val userId = securityService.getUserId()
         try {
-            workspaceService.joinWorkspace(userId, req.workspaceId!!, req.workspaceUserName!!, WorkspaceUserRole.valueOf(req.workspaceUserRole!!))
+            workspaceService.joinWorkspace(userId, req.workspaceId, req.workspaceUserName!!, WorkspaceUserRole.valueOf(req.workspaceUserRole!!))
         } catch (e: RollbackException) {
             throw HttpResponseException(httpStatus = 400, message = "User is already in workspace.")
         }
+        return Response.ok().build()
     }
 
     @PUT
     @Path("workspace/{workspaceId}/user/{userId}")
     fun updateWorkspaceUserRole(@PathParam("workspaceId") workspaceId: String, @PathParam("userId") userId: String,
-                                @Valid req: AdminUpdateWorkspaceUserRoleReq) {
-        // TODO: check if principal is the admin of the workspace
+                                @Valid req: AdminUpdateWorkspaceUserRoleReq): Response {
+        permissionService.canAccessWorkspace(securityService.getUserId(), workspaceId, listOf(WorkspaceUserRole.Admin))
         if (req.workspaceUserRole == null) {
             workspaceService.updateWorkspace(userId, workspaceId, req.workspaceUserName, null)
         } else {
             workspaceService.updateWorkspace(userId, workspaceId, req.workspaceUserName, WorkspaceUserRole.valueOf(req.workspaceUserRole))
         }
+        return Response.ok().build()
     }
 }
 

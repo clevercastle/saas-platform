@@ -7,7 +7,6 @@ import org.clevercastle.saas.util.TimeUtils
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
 import javax.transaction.Transactional
-import javax.ws.rs.core.Response
 
 @ApplicationScoped
 class WorkspaceService {
@@ -49,7 +48,7 @@ class WorkspaceService {
     }
 
     @Transactional
-    fun joinWorkspace(userId: String, workspaceId: String, pWorkspaceUsername: String, role: WorkspaceUserRole): Response {
+    fun joinWorkspace(userId: String, workspaceId: String, pWorkspaceUsername: String, role: WorkspaceUserRole) {
         val userWorkspaceMappingEntity = UserWorkspaceMappingEntity().apply {
             this.workspaceId = workspaceId
             this.userId = userId
@@ -58,11 +57,10 @@ class WorkspaceService {
             this.role = role
         }
         userWorkspaceMappingEntityRepository.persist(userWorkspaceMappingEntity)
-        return Response.ok().build()
     }
 
     @Transactional
-    fun updateWorkspace(userId: String, workspaceId: String, pWorkspaceUsername: String?, role: WorkspaceUserRole?): Response {
+    fun updateWorkspace(userId: String, workspaceId: String, pWorkspaceUsername: String?, role: WorkspaceUserRole?) {
         val userWorkspaceMappingEntity = userWorkspaceMappingEntityRepository.getByUserIdAndWorkspaceId(userId, workspaceId)
                 ?: throw NotFoundException("User is not a member of the workspace")
         if (pWorkspaceUsername != null) {
@@ -73,7 +71,9 @@ class WorkspaceService {
         }
         userWorkspaceMappingEntity.updated_at = TimeUtils.now()
         userWorkspaceMappingEntityRepository.persist(userWorkspaceMappingEntity)
-        return Response.ok().build()
     }
 
+    fun getUserWorkspaceMapping(userId: String, workspaceId: String): UserWorkspaceMappingEntity? {
+        return userWorkspaceMappingEntityRepository.getByUserIdAndWorkspaceId(userId, workspaceId)
+    }
 }
