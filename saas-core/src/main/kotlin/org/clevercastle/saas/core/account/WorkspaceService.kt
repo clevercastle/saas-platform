@@ -1,10 +1,13 @@
 package org.clevercastle.saas.core.account
 
+import org.clevercastle.saas.core.internal.exception.NotFoundException
 import org.clevercastle.saas.core.model.EntityUtil
 import org.clevercastle.saas.core.model.account.*
+import org.clevercastle.saas.util.TimeUtils
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
 import javax.transaction.Transactional
+import javax.ws.rs.core.Response
 
 @ApplicationScoped
 class WorkspaceService {
@@ -15,14 +18,9 @@ class WorkspaceService {
     private lateinit var workspaceEntityRepository: WorkspaceEntityRepository
 
     @Transactional
-    fun createWorkspace(userId: String, workspaceName: String, workspaceUserName: String, isUserDefaultWorkspace: Boolean): Workspace {
-        var workspaceId = EntityUtil.genWorkspaceId()
-        var workspaceUserId = EntityUtil.genWorkspaceUserId()
-        if (isUserDefaultWorkspace) {
-            workspaceId = EntityUtil.genWorkspaceId(EntityUtil.retrieve(userId))
-            workspaceUserId = EntityUtil.genWorkspaceUserId(EntityUtil.retrieve(userId))
-        }
-
+    fun createWorkspace(userId: String, workspaceName: String, workspaceUserName: String): Workspace {
+        val workspaceId = EntityUtil.genWorkspaceId()
+        val workspaceUserId = EntityUtil.genWorkspaceUserId()
         val workspaceEntity = WorkspaceEntity().apply {
             this.id = workspaceId
             this.name = workspaceName
@@ -51,7 +49,7 @@ class WorkspaceService {
     }
 
     @Transactional
-    fun joinWorkspace(userId: String, workspaceId: String, pWorkspaceUsername: String, role: WorkspaceUserRole) {
+    fun joinWorkspace(userId: String, workspaceId: String, pWorkspaceUsername: String, role: WorkspaceUserRole): Response {
         val userWorkspaceMappingEntity = UserWorkspaceMappingEntity().apply {
             this.workspaceId = workspaceId
             this.userId = userId
@@ -60,6 +58,22 @@ class WorkspaceService {
             this.role = role
         }
         userWorkspaceMappingEntityRepository.persist(userWorkspaceMappingEntity)
+        return Response.ok().build()
+    }
+
+    @Transactional
+    fun updateWorkspace(userId: String, workspaceId: String, pWorkspaceUsername: String?, role: WorkspaceUserRole?): Response {
+        val userWorkspaceMappingEntity = userWorkspaceMappingEntityRepository.getByUserIdAndWorkspaceId(userId, workspaceId)
+                ?: throw NotFoundException("User is not a member of the workspace")
+        if (pWorkspaceUsername != null) {
+            userWorkspaceMappingEntity.workspaceUserName = pWorkspaceUsername
+        }
+        if (role != null) {
+            userWorkspaceMappingEntity.role = role
+        }
+        userWorkspaceMappingEntity.updated_at = TimeUtils.now()
+        userWorkspaceMappingEntityRepository.persist(userWorkspaceMappingEntity)
+        return Response.ok().build()
     }
 
 }

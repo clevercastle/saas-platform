@@ -47,4 +47,8 @@ class UserWorkspaceMappingEntityRepository : PanacheRepository<UserWorkspaceMapp
     fun listWorkspaces(userId: String): List<UserWorkspaceMappingEntity> {
         return list("user_id", userId)
     }
+
+    fun getByUserIdAndWorkspaceId(userId: String, workspaceId: String): UserWorkspaceMappingEntity? {
+        return find("user_id = ?1 and workspace_id = ?2", userId, workspaceId).firstResult()
+    }
 }

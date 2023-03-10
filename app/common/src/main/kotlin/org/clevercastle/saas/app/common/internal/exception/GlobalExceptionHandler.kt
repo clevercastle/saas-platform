@@ -1,6 +1,6 @@
 package org.clevercastle.saas.app.common.internal.exception
 
-import org.clevercastle.saas.core.exception.HttpResponseException
+import org.clevercastle.saas.core.internal.exception.HttpResponseException
 import org.slf4j.LoggerFactory
 import javax.ws.rs.core.Response
 import javax.ws.rs.ext.ExceptionMapper

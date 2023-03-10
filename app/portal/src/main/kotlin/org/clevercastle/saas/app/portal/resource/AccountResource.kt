@@ -8,7 +8,8 @@ import org.clevercastle.saas.app.portal.model.request.CreateWorkspaceReq
 import org.clevercastle.saas.app.portal.model.request.JoinWorkspaceReq
 import org.clevercastle.saas.core.account.UserService
 import org.clevercastle.saas.core.account.WorkspaceService
-import org.clevercastle.saas.core.exception.HttpResponseException
+import org.clevercastle.saas.core.internal.exception.HttpResponseException
+import org.clevercastle.saas.core.internal.validation.EnumValidator
 import org.clevercastle.saas.core.model.account.WorkspaceUserRole
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
@@ -40,7 +41,7 @@ class AccountResource {
     @POST
     @Path("workspace")
     fun createWorkspace(@Valid req: CreateWorkspaceReq): WorkspaceVO {
-        val workspace = workspaceService.createWorkspace(securityService.getUserId(), req.name!!, req.workspaceUserName!!, false)
+        val workspace = workspaceService.createWorkspace(securityService.getUserId(), req.name!!, req.workspaceUserName!!)
         return WorkspaceVO.fromWorkspace(workspace)
     }
 
@@ -53,13 +54,30 @@ class AccountResource {
 
     @PUT
     @Path("workspace/join")
-    fun joinWorkspace(@Valid req: JoinWorkspaceReq): List<UserWorkspaceVO> {
+    fun joinWorkspace(@Valid req: JoinWorkspaceReq) {
+        // TODO: check if principal is the admin of the workspace
         val userId = securityService.getUserId()
         try {
             workspaceService.joinWorkspace(userId, req.workspaceId!!, req.workspaceUserName!!, WorkspaceUserRole.valueOf(req.workspaceUserRole!!))
         } catch (e: RollbackException) {
             throw HttpResponseException(httpStatus = 400, message = "User is already in workspace.")
         }
-        return listOf()
+    }
+
+    @PUT
+    @Path("workspace/{workspaceId}/user/{userId}")
+    fun updateWorkspaceUserRole(@PathParam("workspaceId") workspaceId: String, @PathParam("userId") userId: String,
+                                @Valid req: AdminUpdateWorkspaceUserRoleReq) {
+        // TODO: check if principal is the admin of the workspace
+        if (req.workspaceUserRole == null) {
+            workspaceService.updateWorkspace(userId, workspaceId, req.workspaceUserName, null)
+        } else {
+            workspaceService.updateWorkspace(userId, workspaceId, req.workspaceUserName, WorkspaceUserRole.valueOf(req.workspaceUserRole))
+        }
     }
 }
+
+class AdminUpdateWorkspaceUserRoleReq(
+        @field:EnumValidator(WorkspaceUserRole::class, message = "Invalid role", method = "name")
+        val workspaceUserRole: String?,
+        val workspaceUserName: String?)

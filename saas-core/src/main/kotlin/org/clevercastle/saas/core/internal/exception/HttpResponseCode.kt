@@ -1,4 +1,4 @@
-package org.clevercastle.saas.core.exception
+package org.clevercastle.saas.core.internal.exception
 
 typealias HttpResponseCode = String
 
