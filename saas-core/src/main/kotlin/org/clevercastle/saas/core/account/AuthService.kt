@@ -2,8 +2,8 @@ package org.clevercastle.saas.core.account
 
 import org.clevercastle.saas.core.iam.IAMService
 import org.clevercastle.saas.core.jwt.TokenHolder
-import org.clevercastle.saas.core.model.EntityUtil
 import org.clevercastle.saas.core.model.account.*
+import org.clevercastle.saas.util.TimeUtils
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
 import javax.transaction.Transactional
@@ -32,13 +32,20 @@ class AuthService {
     fun register(email: String, password: String, name: String): User {
         val identityServerUser = iamService.registerUser(email, password, mapOf())
         val userEntity = UserEntity().apply {
-            this.defaultWorkspaceId = EntityUtil.Companion.Account.genWorkspaceId(EntityUtil.retrieve(this.id))
             this.email = email
+            this.createdAt = TimeUtils.now()
+            this.updatedAt = TimeUtils.now()
+            this.createdBy = this.id
+            this.updatedBy = this.id
         }
         val userOIDCMapping = UserOIDCMapping().apply {
             this.userId = userEntity.id
             this.userSub = identityServerUser.userSub
             this.oidcProvider = OidcProvider.Auth0
+            this.createdAt = TimeUtils.now()
+            this.updatedAt = TimeUtils.now()
+            this.createdBy = this.id
+            this.updatedBy = this.id
         }
         userRepository.persist(userEntity)
         userOIDCMappingRepository.persist(userOIDCMapping)

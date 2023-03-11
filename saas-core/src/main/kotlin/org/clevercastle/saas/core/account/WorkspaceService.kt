@@ -1,5 +1,6 @@
 package org.clevercastle.saas.core.account
 
+import org.clevercastle.saas.core.internal.auth.SecurityService
 import org.clevercastle.saas.core.internal.exception.NotFoundException
 import org.clevercastle.saas.core.model.EntityUtil
 import org.clevercastle.saas.core.model.account.*
@@ -16,23 +17,39 @@ class WorkspaceService {
     @Inject
     private lateinit var workspaceEntityRepository: WorkspaceEntityRepository
 
+    @Inject
+    private lateinit var userWorkspaceTeamMappingEntityRepository: UserWorkspaceMappingEntityRepository
+
+    @Inject
+    private lateinit var workspaceTeamEntityRepository: WorkspaceTeamEntityRepository
+
+    @Inject
+    private lateinit var securityService: SecurityService
+
+    // region workspace
+
     @Transactional
     fun createWorkspace(userId: String, workspaceName: String, workspaceUserName: String): Workspace {
         val workspaceId = EntityUtil.Companion.Account.genWorkspaceId()
-        val workspaceUserId = EntityUtil.Companion.Account.genWorkspaceUserId()
         val workspaceEntity = WorkspaceEntity().apply {
             this.id = workspaceId
             this.name = workspaceName
+            this.createdAt = TimeUtils.now()
+            this.updatedAt = TimeUtils.now()
+            this.createdBy = this.id
+            this.updatedBy = this.id
         }
 
         val userWorkspaceMappingEntity = UserWorkspaceMappingEntity().apply {
-            this.workspaceId = workspaceEntity.id
             this.userId = userId
-            this.workspaceUserId = workspaceUserId
+            this.workspaceId = workspaceEntity.id
             this.workspaceUserName = workspaceUserName
             this.role = WorkspaceUserRole.Admin
+            this.createdAt = TimeUtils.now()
+            this.updatedAt = TimeUtils.now()
+            this.createdBy = this.id
+            this.updatedBy = this.id
         }
-
         workspaceEntityRepository.persist(workspaceEntity)
         userWorkspaceMappingEntityRepository.persist(userWorkspaceMappingEntity)
         return Workspace.fromWorkspaceEntity(workspaceEntity)
@@ -43,7 +60,7 @@ class WorkspaceService {
         val workspaces = workspaceEntityRepository.listWorkspaces(mappings.map { it.workspaceId })
         return mappings.map { mapping ->
             val workspace = workspaces.find { it.id == mapping.workspaceId }
-            WorkspaceUser.fromUserWorkspaceMappingEntity(mapping, workspace!!.name!!)
+            WorkspaceUser.fromEntity(mapping, workspace!!.name!!)
         }
     }
 
@@ -52,9 +69,12 @@ class WorkspaceService {
         val userWorkspaceMappingEntity = UserWorkspaceMappingEntity().apply {
             this.workspaceId = workspaceId
             this.userId = userId
-            this.workspaceUserId = EntityUtil.Companion.Account.genWorkspaceUserId()
             this.workspaceUserName = pWorkspaceUsername
             this.role = role
+            this.createdAt = TimeUtils.now()
+            this.updatedAt = TimeUtils.now()
+            this.createdBy = securityService.getUserId()
+            this.updatedBy = securityService.getUserId()
         }
         userWorkspaceMappingEntityRepository.persist(userWorkspaceMappingEntity)
     }
@@ -69,11 +89,46 @@ class WorkspaceService {
         if (role != null) {
             userWorkspaceMappingEntity.role = role
         }
-        userWorkspaceMappingEntity.updated_at = TimeUtils.now()
+        userWorkspaceMappingEntity.updatedAt = TimeUtils.now()
+        userWorkspaceMappingEntity.updatedBy = securityService.getUserId()
         userWorkspaceMappingEntityRepository.persist(userWorkspaceMappingEntity)
     }
 
     fun getUserWorkspaceMapping(userId: String, workspaceId: String): UserWorkspaceMappingEntity? {
         return userWorkspaceMappingEntityRepository.getByUserIdAndWorkspaceId(userId, workspaceId)
     }
+
+    // endregion
+
+    // region workspace team
+
+    @Transactional
+    fun createWorkspaceTeam(userId: String, workspaceId: String, name: String, description: String?): WorkspaceTeam {
+        val workspaceTeamEntity = WorkspaceTeamEntity().apply {
+            this.workspaceId = workspaceId
+            this.name = name
+            this.description = description
+            this.createdAt = TimeUtils.now()
+            this.createdBy = userId
+            this.updatedAt = TimeUtils.now()
+            this.updatedBy = userId
+        }
+        val userWorkspaceTeamEntity = UserWorkspaceTeamMappingEntity().apply {
+            this.userId = userId
+            this.workspaceId = workspaceId
+            this.workspaceTeamId = workspaceTeamEntity.id
+            this.userInWorkspaceTeamRole = UserInWorkspaceTeamRole.Admin
+            this.createdAt = TimeUtils.now()
+            this.createdBy = userId
+            this.updatedAt = TimeUtils.now()
+            this.updatedBy = userId
+        }
+        workspaceTeamEntity.persist()
+        userWorkspaceTeamEntity.persist()
+        return WorkspaceTeam.fromEntity(workspaceTeamEntity)
+    }
+
+    // endregion
+
+
 }

@@ -3,6 +3,7 @@ package org.clevercastle.saas.app.portal.resource
 import org.clevercastle.saas.app.common.auth.SecurityService
 import org.clevercastle.saas.app.common.vo.UserVO
 import org.clevercastle.saas.app.common.vo.UserWorkspaceVO
+import org.clevercastle.saas.app.common.vo.WorkspaceTeamVO
 import org.clevercastle.saas.app.common.vo.WorkspaceVO
 import org.clevercastle.saas.app.portal.model.request.CreateWorkspaceReq
 import org.clevercastle.saas.app.portal.model.request.JoinWorkspaceReq
@@ -16,6 +17,7 @@ import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
 import javax.transaction.RollbackException
 import javax.validation.Valid
+import javax.validation.constraints.NotEmpty
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
@@ -61,9 +63,8 @@ class AccountResource {
     @Path("workspace/join")
     fun joinWorkspace(@Valid req: JoinWorkspaceReq): Response {
         permissionService.canAccessWorkspace(securityService.getUserId(), req.workspaceId!!, listOf(WorkspaceUserRole.Admin))
-        val userId = securityService.getUserId()
         try {
-            workspaceService.joinWorkspace(userId, req.workspaceId, req.workspaceUserName!!, WorkspaceUserRole.valueOf(req.workspaceUserRole!!))
+            workspaceService.joinWorkspace(req.userId!!, req.workspaceId, req.workspaceUserName!!, WorkspaceUserRole.valueOf(req.workspaceUserRole!!))
         } catch (e: RollbackException) {
             throw HttpResponseException(httpStatus = 400, message = "User is already in workspace.")
         }
@@ -82,6 +83,20 @@ class AccountResource {
         }
         return Response.ok().build()
     }
+
+    @POST
+    fun createWorkspaceTeam(@Valid req: CreateWorkspaceTeamReq): WorkspaceTeamVO {
+        val workspaceTeam = workspaceService.createWorkspaceTeam(securityService.getUserId(), securityService.getUserWorkspaceMapping().workspaceId,
+                req.name!!, req.description)
+        return WorkspaceTeamVO.fromWorkspaceTeam(workspaceTeam)
+    }
+}
+
+
+class CreateWorkspaceTeamReq {
+    @field:NotEmpty(message = "Team name is required")
+    var name: String? = null
+    var description: String? = null
 }
 
 class AdminUpdateWorkspaceUserRoleReq(

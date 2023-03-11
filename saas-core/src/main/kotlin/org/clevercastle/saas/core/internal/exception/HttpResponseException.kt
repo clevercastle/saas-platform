@@ -1,6 +1,6 @@
 package org.clevercastle.saas.core.internal.exception
 
-class HttpResponseException(
+open class HttpResponseException(
         val httpStatus: Int = 0,
         val code: HttpResponseCode? = null,
         message: String? = null,

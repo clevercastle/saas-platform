@@ -1,4 +1,4 @@
-package org.clevercastle.saas.app.common.auth
+package org.clevercastle.saas.core.internal.auth
 
 import java.security.Principal
 

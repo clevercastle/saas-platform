@@ -1,6 +1,7 @@
 package org.clevercastle.saas.core.account
 
 import org.clevercastle.saas.core.model.account.UserEntity
+import java.time.OffsetDateTime
 
 class User {
     companion object {
@@ -10,8 +11,11 @@ class User {
             }
             return User().apply {
                 this.id = user.id
-                this.defaultWorkspaceId = user.defaultWorkspaceId
                 this.email = user.email
+                this.createdAt = user.createdAt
+                this.updatedAt = user.updatedAt
+                this.createdBy = user.createdBy
+                this.updatedBy = user.updatedBy
             }
         }
 
@@ -19,15 +23,21 @@ class User {
                                         workspaces: List<Workspace>): User {
             return User().apply {
                 this.id = user.id
-                this.defaultWorkspaceId = user.defaultWorkspaceId
                 this.email = user.email
                 this.workspaces.addAll(workspaces)
+                this.createdAt = user.createdAt
+                this.updatedAt = user.updatedAt
+                this.createdBy = user.createdBy
+                this.updatedBy = user.updatedBy
             }
         }
     }
 
     lateinit var id: String
-    lateinit var defaultWorkspaceId: String
     lateinit var email: String
     val workspaces = mutableListOf<Workspace>()
+    lateinit var createdAt: OffsetDateTime
+    lateinit var updatedAt: OffsetDateTime
+    var createdBy: String? = null
+    var updatedBy: String? = null
 }

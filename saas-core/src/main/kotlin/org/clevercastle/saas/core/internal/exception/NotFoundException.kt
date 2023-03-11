@@ -1,3 +1,5 @@
 package org.clevercastle.saas.core.internal.exception
 
-class NotFoundException(message: String) : RuntimeException(message)
+import javax.ws.rs.core.Response
+
+class NotFoundException(message: String) : HttpResponseException(httpStatus = Response.Status.NOT_FOUND.statusCode, null, message)

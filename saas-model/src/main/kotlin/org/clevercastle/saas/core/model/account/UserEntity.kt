@@ -6,25 +6,9 @@ import org.clevercastle.saas.core.model.BaseEntity
 import org.clevercastle.saas.core.model.EntityUtil
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
-import javax.persistence.AttributeConverter
 import javax.persistence.Convert
 import javax.persistence.Entity
 import javax.persistence.Id
-
-enum class OidcProvider {
-    Auth0,
-    Cognito
-}
-
-class OidcProviderHibernateConverter : AttributeConverter<OidcProvider, String> {
-    override fun convertToDatabaseColumn(attribute: OidcProvider?): String {
-        return attribute!!.name
-    }
-
-    override fun convertToEntityAttribute(dbData: String?): OidcProvider {
-        return OidcProvider.valueOf(dbData!!)
-    }
-}
 
 @Entity(name = "users")
 class UserEntity : BaseEntity() {
@@ -32,7 +16,6 @@ class UserEntity : BaseEntity() {
 
     @Id
     var id: String = EntityUtil.Companion.Account.genUserId()
-    lateinit var defaultWorkspaceId: String
     lateinit var email: String
 }
 

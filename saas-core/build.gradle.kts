@@ -11,5 +11,6 @@ dependencies {
 
     implementation("io.quarkus:quarkus-rest-client")
     implementation("io.quarkus:quarkus-rest-client-jackson")
+    implementation("io.quarkus:quarkus-security")
     implementation("com.auth0:auth0:1.44.2")
 }

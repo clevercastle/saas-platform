@@ -1,4 +1,4 @@
-package org.clevercastle.saas.app.common.auth
+package org.clevercastle.saas.core.internal.auth
 
 import io.quarkus.security.identity.SecurityIdentity
 import org.clevercastle.saas.core.account.UserWorkspaceMapping

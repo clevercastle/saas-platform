@@ -5,6 +5,8 @@ import org.clevercastle.saas.core.model.account.WorkspaceUserRole
 import javax.validation.constraints.NotBlank
 
 data class JoinWorkspaceReq(
+        @field:NotBlank(message = "User Id is required")
+        val userId: String?,
         @field:NotBlank(message = "Name is required")
         val workspaceId: String?,
         @field:NotBlank(message = "User in workspace's name  is required")

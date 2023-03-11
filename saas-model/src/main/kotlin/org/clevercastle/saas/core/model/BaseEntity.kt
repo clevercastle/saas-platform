@@ -7,10 +7,10 @@ import javax.persistence.MappedSuperclass
 
 @MappedSuperclass
 open class BaseEntity : PanacheEntityBase {
-    var created_at: OffsetDateTime = OffsetDateTime.now()
-    var created_by: String? = null
-    var updated_at: OffsetDateTime = OffsetDateTime.now()
-    var updated_by: String? = null
+    var createdAt: OffsetDateTime = OffsetDateTime.now()
+    var createdBy: String? = null
+    var updatedAt: OffsetDateTime = OffsetDateTime.now()
+    var updatedBy: String? = null
 }
 
 class EntityUtil {
@@ -37,7 +37,8 @@ class EntityUtil {
                 const val user = "user_"
                 const val workspace = "workspace_"
                 const val userWorkspaceMapping = "uwm_"
-                const val workspaceUser = "wuser_"
+                const val workspaceTeam = "wteam_"
+                const val userWorkspaceTeamMapping = "uwteam_"
                 fun genUserId(randomPart: String = UUID.randomUUID().toString()): String {
                     return "${user}${randomPart}"
                 }
@@ -46,10 +47,25 @@ class EntityUtil {
                     return "${workspace}${randomPart}"
                 }
 
-                fun genWorkspaceUserId(randomPart: String = UUID.randomUUID().toString()): String {
-                    return "${workspaceUser}${randomPart}"
+                fun genWorkspaceTeamId(randomPart: String = UUID.randomUUID().toString()): String {
+                    return "${workspaceTeam}${randomPart}"
+                }
+
+                fun genWorkspaceUserTeamMappingId(randomPart: String = UUID.randomUUID().toString()): String {
+                    return "${userWorkspaceTeamMapping}${randomPart}"
                 }
             }
+        }
+
+        class Alpha {
+            companion object {
+                const val alphaTask = "alpha_"
+                fun genAlphaTaskId(randomPart: String = UUID.randomUUID().toString()): String {
+                    return "${alphaTask}${randomPart}"
+                }
+            }
+
+
         }
 
     }
