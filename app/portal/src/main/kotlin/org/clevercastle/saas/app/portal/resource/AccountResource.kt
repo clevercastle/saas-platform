@@ -1,6 +1,5 @@
 package org.clevercastle.saas.app.portal.resource
 
-import org.clevercastle.saas.app.common.auth.SecurityService
 import org.clevercastle.saas.app.common.vo.UserVO
 import org.clevercastle.saas.app.common.vo.UserWorkspaceVO
 import org.clevercastle.saas.app.common.vo.WorkspaceTeamVO
@@ -9,9 +8,12 @@ import org.clevercastle.saas.app.portal.model.request.CreateWorkspaceReq
 import org.clevercastle.saas.app.portal.model.request.JoinWorkspaceReq
 import org.clevercastle.saas.core.account.PermissionService
 import org.clevercastle.saas.core.account.UserService
+import org.clevercastle.saas.core.account.UserWorkspaceTeam
 import org.clevercastle.saas.core.account.WorkspaceService
+import org.clevercastle.saas.core.internal.auth.SecurityService
 import org.clevercastle.saas.core.internal.exception.HttpResponseException
 import org.clevercastle.saas.core.internal.validation.EnumValidator
+import org.clevercastle.saas.core.model.account.UserInWorkspaceTeamRole
 import org.clevercastle.saas.core.model.account.WorkspaceUserRole
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
@@ -84,11 +86,41 @@ class AccountResource {
         return Response.ok().build()
     }
 
+    @GET
+    @Path("workspace/{workspaceId}/team")
+    fun getWorkspaceTeam(@PathParam("workspaceId") workspaceId: String): List<UserWorkspaceTeam> {
+        val userWorkspaceMapping = securityService.getUserWorkspaceMapping()
+        if (userWorkspaceMapping.workspaceId != workspaceId) {
+            throw HttpResponseException(httpStatus = Response.Status.BAD_REQUEST.statusCode, message = "The workspace id in path is not correct")
+        }
+        return workspaceService.listUserWorkspaceTeams(securityService.getUserId(), userWorkspaceMapping.workspaceId)
+    }
+
     @POST
-    fun createWorkspaceTeam(@Valid req: CreateWorkspaceTeamReq): WorkspaceTeamVO {
-        val workspaceTeam = workspaceService.createWorkspaceTeam(securityService.getUserId(), securityService.getUserWorkspaceMapping().workspaceId,
+    @Path("workspace/{workspaceId}/team")
+    fun createWorkspaceTeam(@PathParam("workspaceId") workspaceId: String, @Valid req: CreateWorkspaceTeamReq): WorkspaceTeamVO {
+        val userWorkspaceMapping = securityService.getUserWorkspaceMapping()
+        if (userWorkspaceMapping.workspaceId != workspaceId) {
+            throw HttpResponseException(httpStatus = Response.Status.BAD_REQUEST.statusCode, message = "The workspace id in path is not correct")
+        }
+        val workspaceTeam = workspaceService.createWorkspaceTeam(securityService.getUserId(), userWorkspaceMapping.workspaceId,
                 req.name!!, req.description)
         return WorkspaceTeamVO.fromWorkspaceTeam(workspaceTeam)
+    }
+
+    /**
+     * Join a workspace team
+     */
+    @PUT
+    @Path("workspace/{workspaceId}/team/join")
+    fun joinWorkspaceTeam(@PathParam("workspaceId") workspaceId: String, @Valid req: JoinWorkspaceTeamReq): Response {
+        // TODO: check the operator is the admin of the team 
+        val userWorkspaceMapping = securityService.getUserWorkspaceMapping()
+        if (userWorkspaceMapping.workspaceId != workspaceId) {
+            throw HttpResponseException(httpStatus = Response.Status.BAD_REQUEST.statusCode, message = "The workspace id in path is not correct")
+        }
+        workspaceService.joinWorkspaceTeam(securityService.getUserId(), userWorkspaceMapping.workspaceId, req.workspaceTeamId!!, req.role)
+        return Response.ok().build()
     }
 }
 
@@ -97,6 +129,15 @@ class CreateWorkspaceTeamReq {
     @field:NotEmpty(message = "Team name is required")
     var name: String? = null
     var description: String? = null
+}
+
+class JoinWorkspaceTeamReq {
+    @field:NotEmpty(message = "Team name is required")
+    var userId: String? = null
+
+    @field:NotEmpty(message = "Workspace team id is required")
+    var workspaceTeamId: String? = null
+    var role: UserInWorkspaceTeamRole = UserInWorkspaceTeamRole.ReadOnlyUser
 }
 
 class AdminUpdateWorkspaceUserRoleReq(

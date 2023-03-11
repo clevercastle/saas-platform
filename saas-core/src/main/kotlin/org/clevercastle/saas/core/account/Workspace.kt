@@ -1,9 +1,6 @@
 package org.clevercastle.saas.core.account
 
-import org.clevercastle.saas.core.model.account.UserWorkspaceMappingEntity
-import org.clevercastle.saas.core.model.account.WorkspaceEntity
-import org.clevercastle.saas.core.model.account.WorkspaceTeamEntity
-import org.clevercastle.saas.core.model.account.WorkspaceUserRole
+import org.clevercastle.saas.core.model.account.*
 import java.time.OffsetDateTime
 
 class Workspace {
@@ -130,4 +127,26 @@ class WorkspaceTeam {
     lateinit var updatedAt: OffsetDateTime
     var createdBy: String? = null
     var updatedBy: String? = null
+}
+
+
+class UserWorkspaceTeam {
+    companion object {
+        fun fromEntity(workspaceTeamEntity: WorkspaceTeamEntity, userWorkspaceTeamMappingEntity: UserWorkspaceTeamMappingEntity): UserWorkspaceTeam {
+            return UserWorkspaceTeam().apply {
+                this.userId = userWorkspaceTeamMappingEntity.userId
+                this.workspaceId = workspaceTeamEntity.workspaceId
+                this.name = workspaceTeamEntity.name
+                this.description = workspaceTeamEntity.description
+                this.role = userWorkspaceTeamMappingEntity.userInWorkspaceTeamRole
+            }
+        }
+    }
+
+    lateinit var userId: String
+    lateinit var workspaceId: String
+    lateinit var name: String
+    var description: String? = null
+    lateinit var role: UserInWorkspaceTeamRole
+
 }

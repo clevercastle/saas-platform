@@ -22,7 +22,11 @@ class WorkspaceTeamEntity : BaseEntity() {
 }
 
 @ApplicationScoped
-class WorkspaceTeamEntityRepository : PanacheRepository<WorkspaceTeamEntity>
+class WorkspaceTeamEntityRepository : PanacheRepository<WorkspaceTeamEntity> {
+    fun listWorkspaceTeams(workspaceIds: List<String>): List<WorkspaceTeamEntity> {
+        return list("id in ?1", workspaceIds)
+    }
+}
 
 
 @Entity(name = "user_workspace_team_mapping")
@@ -39,3 +43,11 @@ class UserWorkspaceTeamMappingEntity : BaseEntity() {
     @field:Convert(converter = UserInWorkspaceTeamRoleHibernateConverter::class)
     lateinit var userInWorkspaceTeamRole: UserInWorkspaceTeamRole
 }
+
+@ApplicationScoped
+class UserWorkspaceTeamMappingEntityRepository : PanacheRepository<UserWorkspaceTeamMappingEntity> {
+    fun listUserWorkspaceTeamMappings(userId: String, workspaceId: String): List<UserWorkspaceTeamMappingEntity> {
+        return list("userId=?1 and workspaceId=?2", userId, workspaceId)
+    }
+}
+

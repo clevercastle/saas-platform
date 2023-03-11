@@ -9,9 +9,12 @@ import io.smallrye.mutiny.Uni
 import io.smallrye.mutiny.infrastructure.Infrastructure
 import io.smallrye.mutiny.unchecked.Unchecked
 import io.vertx.ext.web.RoutingContext
-import org.clevercastle.saas.app.common.auth.*
+import org.clevercastle.saas.app.common.auth.AbstractIdentityProvider
+import org.clevercastle.saas.app.common.auth.Auth0JWTPayload
+import org.clevercastle.saas.app.common.auth.JWTPayload
 import org.clevercastle.saas.app.common.auth.authrequest.SaasTokenAuthenticationRequest
 import org.clevercastle.saas.core.account.UserService
+import org.clevercastle.saas.core.internal.auth.SaasPrincipal
 import org.eclipse.microprofile.config.inject.ConfigProperty
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
@@ -20,8 +23,7 @@ import javax.inject.Inject
 @ApplicationScoped
 class SaasAuth0IdentityProvider : IdentityProvider<SaasTokenAuthenticationRequest>, AbstractIdentityProvider() {
     companion object {
-        protected val WORKSPACE_ID_HEADER = "WorkspaceId"
-        protected val TEAM_ID_HEADER = "TeamId"
+        protected val WORKSPACE_ID_HEADER = "Workspace-Id"
     }
 
     @ConfigProperty(name = "saas.iam.auth0.issuer")
@@ -44,7 +46,6 @@ class SaasAuth0IdentityProvider : IdentityProvider<SaasTokenAuthenticationReques
     override fun authenticate(request: SaasTokenAuthenticationRequest, context: AuthenticationRequestContext): Uni<SecurityIdentity> {
         val context = request.attributes[HttpSecurityUtils.ROUTING_CONTEXT_ATTRIBUTE] as RoutingContext
         val workspaceId: String? = context.request().headers().get(WORKSPACE_ID_HEADER)
-        val teamId: String? = context.request().headers().get(TEAM_ID_HEADER)
         val jwtToken = request.token
         val jwtPayload = verifyJWTToken(jwtToken.token)
         val userSub: String?

@@ -18,7 +18,7 @@ class WorkspaceService {
     private lateinit var workspaceEntityRepository: WorkspaceEntityRepository
 
     @Inject
-    private lateinit var userWorkspaceTeamMappingEntityRepository: UserWorkspaceMappingEntityRepository
+    private lateinit var userWorkspaceTeamMappingEntityRepository: UserWorkspaceTeamMappingEntityRepository
 
     @Inject
     private lateinit var workspaceTeamEntityRepository: WorkspaceTeamEntityRepository
@@ -102,6 +102,15 @@ class WorkspaceService {
 
     // region workspace team
 
+    fun listUserWorkspaceTeams(userId: String, workspaceId: String): List<UserWorkspaceTeam> {
+        val mappings = userWorkspaceTeamMappingEntityRepository.listUserWorkspaceTeamMappings(userId, workspaceId)
+        val workspaceTeams = workspaceTeamEntityRepository.listWorkspaceTeams(mappings.map { it.workspaceTeamId })
+        return workspaceTeams.map { team ->
+            val mapping = mappings.find { it.workspaceTeamId == team.id }!!
+            UserWorkspaceTeam.fromEntity(team, mapping)
+        }
+    }
+
     @Transactional
     fun createWorkspaceTeam(userId: String, workspaceId: String, name: String, description: String?): WorkspaceTeam {
         val workspaceTeamEntity = WorkspaceTeamEntity().apply {
@@ -126,6 +135,21 @@ class WorkspaceService {
         workspaceTeamEntity.persist()
         userWorkspaceTeamEntity.persist()
         return WorkspaceTeam.fromEntity(workspaceTeamEntity)
+    }
+
+    @Transactional
+    fun joinWorkspaceTeam(userId: String, workspaceId: String, workspaceTeamId: String, role: UserInWorkspaceTeamRole) {
+        val userWorkspaceTeamMappingEntity = UserWorkspaceTeamMappingEntity().apply {
+            this.userId = userId
+            this.workspaceId = workspaceId
+            this.workspaceTeamId = workspaceTeamId
+            this.userInWorkspaceTeamRole = role
+            this.createdAt = TimeUtils.now()
+            this.updatedAt = TimeUtils.now()
+            this.createdBy = securityService.getUserId()
+            this.updatedBy = securityService.getUserId()
+        }
+        userWorkspaceTeamMappingEntity.persist()
     }
 
     // endregion

@@ -26,6 +26,6 @@ class SecurityService {
             return UserWorkspaceMapping.fromEntity(workspaceService.getUserWorkspaceMapping(getUserId(), workspaceId))
                     ?: throw HttpResponseException(Response.Status.FORBIDDEN.statusCode, "User is not a member of the workspace")
         }
-        throw HttpResponseException(Response.Status.FORBIDDEN.statusCode, "User is not a member of the workspace")
+        throw HttpResponseException(Response.Status.FORBIDDEN.statusCode, "Api needs to be called in the context of a workspace")
     }
 }
