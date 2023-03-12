@@ -1,12 +1,14 @@
 package org.clevercastle.saas.core.account
 
 import org.clevercastle.saas.core.internal.auth.SecurityService
+import org.clevercastle.saas.core.internal.exception.BadRequestException
 import org.clevercastle.saas.core.internal.exception.NotFoundException
 import org.clevercastle.saas.core.model.EntityUtil
 import org.clevercastle.saas.core.model.account.*
 import org.clevercastle.saas.util.TimeUtils
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
+import javax.transaction.RollbackException
 import javax.transaction.Transactional
 
 @ApplicationScoped
@@ -67,8 +69,8 @@ class WorkspaceService {
     @Transactional
     fun joinWorkspace(userId: String, workspaceId: String, pWorkspaceUsername: String, role: WorkspaceUserRole) {
         val userWorkspaceMappingEntity = UserWorkspaceMappingEntity().apply {
-            this.workspaceId = workspaceId
             this.userId = userId
+            this.workspaceId = workspaceId
             this.workspaceUserName = pWorkspaceUsername
             this.role = role
             this.createdAt = TimeUtils.now()
@@ -139,6 +141,11 @@ class WorkspaceService {
 
     @Transactional
     fun joinWorkspaceTeam(userId: String, workspaceId: String, workspaceTeamId: String, role: UserInWorkspaceTeamRole) {
+        val workspaceTeamEntity = workspaceTeamEntityRepository.findById(workspaceTeamId)
+                ?: throw NotFoundException("Workspace team not found")
+        if (workspaceTeamEntity.workspaceId != workspaceId) {
+            throw BadRequestException("Workspace team does not belong to the workspace")
+        }
         val userWorkspaceTeamMappingEntity = UserWorkspaceTeamMappingEntity().apply {
             this.userId = userId
             this.workspaceId = workspaceId
@@ -152,6 +159,13 @@ class WorkspaceService {
         userWorkspaceTeamMappingEntity.persist()
     }
 
+    @Transactional
+    fun leaveWorkspaceTeam(userId: String, workspaceId: String, workspaceTeamId: String) {
+        val count = userWorkspaceTeamMappingEntityRepository.delete(userId, workspaceId, workspaceTeamId)
+        if (count > 1) {
+            throw RollbackException("More than one user workspace team mapping is deleted")
+        }
+    }
     // endregion
 
 

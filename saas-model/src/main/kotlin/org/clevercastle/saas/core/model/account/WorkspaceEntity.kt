@@ -1,7 +1,6 @@
 package org.clevercastle.saas.core.model.account
 
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheCompanionBase
-import io.quarkus.hibernate.orm.panache.kotlin.PanacheRepository
 import org.clevercastle.saas.core.model.BaseEntity
 import org.clevercastle.saas.core.model.EntityUtil
 import javax.enterprise.context.ApplicationScoped
@@ -18,7 +17,7 @@ class WorkspaceEntity : BaseEntity() {
 }
 
 @ApplicationScoped
-class WorkspaceEntityRepository : PanacheRepository<WorkspaceEntity> {
+class WorkspaceEntityRepository : PanacheCompanionBase<WorkspaceEntity, String> {
     fun listWorkspaces(ids: List<String>): List<WorkspaceEntity> {
         return list("id in ?1", ids)
     }

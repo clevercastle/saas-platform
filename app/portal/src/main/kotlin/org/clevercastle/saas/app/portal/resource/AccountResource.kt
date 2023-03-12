@@ -17,6 +17,7 @@ import org.clevercastle.saas.core.model.account.UserInWorkspaceTeamRole
 import org.clevercastle.saas.core.model.account.WorkspaceUserRole
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
+import javax.persistence.PersistenceException
 import javax.transaction.RollbackException
 import javax.validation.Valid
 import javax.validation.constraints.NotEmpty
@@ -114,16 +115,42 @@ class AccountResource {
     @PUT
     @Path("workspace/{workspaceId}/team/join")
     fun joinWorkspaceTeam(@PathParam("workspaceId") workspaceId: String, @Valid req: JoinWorkspaceTeamReq): Response {
-        // TODO: check the operator is the admin of the team 
+        // TODO: check the operator is the admin of the team  or the admin of the workspace
         val userWorkspaceMapping = securityService.getUserWorkspaceMapping()
         if (userWorkspaceMapping.workspaceId != workspaceId) {
             throw HttpResponseException(httpStatus = Response.Status.BAD_REQUEST.statusCode, message = "The workspace id in path is not correct")
         }
-        workspaceService.joinWorkspaceTeam(securityService.getUserId(), userWorkspaceMapping.workspaceId, req.workspaceTeamId!!, req.role)
+        try {
+            workspaceService.joinWorkspaceTeam(req.userId!!, userWorkspaceMapping.workspaceId, req.workspaceTeamId!!, req.role)
+        } catch (e: RollbackException) {
+            when (e.cause?.javaClass) {
+                PersistenceException::class.java -> {
+                    throw HttpResponseException(httpStatus = 400, message = "User is already in workspace team.")
+                }
+                else -> {
+                    throw HttpResponseException(httpStatus = 500, message = "")
+                }
+            }
+        }
+        return Response.ok().build()
+    }
+
+    /**
+     * Join a workspace team
+     */
+    @PUT
+    @Path("workspace/{workspaceId}/team/{workspaceTeamId}/leave")
+    fun leaveWorkspaceTeam(@PathParam("workspaceId") workspaceId: String,
+                           @PathParam("workspaceTeamId") workspaceTeamId: String, @Valid req: LeaveWorkspaceTeamReq): Response {
+        // TODO: check the operator is the admin of the team  or the admin of the workspace
+        val userWorkspaceMapping = securityService.getUserWorkspaceMapping()
+        if (userWorkspaceMapping.workspaceId != workspaceId) {
+            throw HttpResponseException(httpStatus = Response.Status.BAD_REQUEST.statusCode, message = "The workspace id in path is not correct")
+        }
+        workspaceService.leaveWorkspaceTeam(req.userId!!, securityService.getUserWorkspaceMapping().workspaceId, workspaceTeamId)
         return Response.ok().build()
     }
 }
-
 
 class CreateWorkspaceTeamReq {
     @field:NotEmpty(message = "Team name is required")
@@ -132,12 +159,17 @@ class CreateWorkspaceTeamReq {
 }
 
 class JoinWorkspaceTeamReq {
-    @field:NotEmpty(message = "Team name is required")
+    @field:NotEmpty(message = "UserId is required")
     var userId: String? = null
 
     @field:NotEmpty(message = "Workspace team id is required")
     var workspaceTeamId: String? = null
     var role: UserInWorkspaceTeamRole = UserInWorkspaceTeamRole.ReadOnlyUser
+}
+
+class LeaveWorkspaceTeamReq {
+    @field:NotEmpty(message = "UserId is required")
+    var userId: String? = null
 }
 
 class AdminUpdateWorkspaceUserRoleReq(

@@ -1,7 +1,7 @@
 package org.clevercastle.saas.core.model.account
 
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheCompanionBase
-import io.quarkus.hibernate.orm.panache.kotlin.PanacheRepository
+import io.quarkus.hibernate.orm.panache.kotlin.PanacheRepositoryBase
 import org.clevercastle.saas.core.model.BaseEntity
 import org.clevercastle.saas.core.model.EntityUtil
 import java.util.*
@@ -26,7 +26,7 @@ class UserWorkspaceMappingEntity : BaseEntity() {
 }
 
 @ApplicationScoped
-class UserWorkspaceMappingEntityRepository : PanacheRepository<UserWorkspaceMappingEntity> {
+class UserWorkspaceMappingEntityRepository : PanacheRepositoryBase<UserWorkspaceMappingEntity, String> {
     fun listWorkspaces(userId: String): List<UserWorkspaceMappingEntity> {
         return list("user_id", userId)
     }

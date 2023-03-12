@@ -1,7 +1,7 @@
 package org.clevercastle.saas.core.model.account
 
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheCompanionBase
-import io.quarkus.hibernate.orm.panache.kotlin.PanacheRepository
+import io.quarkus.hibernate.orm.panache.kotlin.PanacheRepositoryBase
 import org.clevercastle.saas.core.model.BaseEntity
 import org.clevercastle.saas.core.model.EntityUtil
 import javax.enterprise.context.ApplicationScoped
@@ -22,7 +22,7 @@ class WorkspaceTeamEntity : BaseEntity() {
 }
 
 @ApplicationScoped
-class WorkspaceTeamEntityRepository : PanacheRepository<WorkspaceTeamEntity> {
+class WorkspaceTeamEntityRepository : PanacheRepositoryBase<WorkspaceTeamEntity, String> {
     fun listWorkspaceTeams(workspaceIds: List<String>): List<WorkspaceTeamEntity> {
         return list("id in ?1", workspaceIds)
     }
@@ -45,9 +45,13 @@ class UserWorkspaceTeamMappingEntity : BaseEntity() {
 }
 
 @ApplicationScoped
-class UserWorkspaceTeamMappingEntityRepository : PanacheRepository<UserWorkspaceTeamMappingEntity> {
+class UserWorkspaceTeamMappingEntityRepository : PanacheRepositoryBase<UserWorkspaceTeamMappingEntity, String> {
     fun listUserWorkspaceTeamMappings(userId: String, workspaceId: String): List<UserWorkspaceTeamMappingEntity> {
         return list("userId=?1 and workspaceId=?2", userId, workspaceId)
+    }
+
+    fun delete(userId: String, workspaceId: String, teamId: String): Long {
+        return delete("userId=?1 and workspaceId=?2 and workspaceTeamId=?3", userId, workspaceId, teamId)
     }
 }
 
