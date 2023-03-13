@@ -59,9 +59,19 @@ class EntityUtil {
 
         class Alpha {
             companion object {
-                const val alphaTask = "alpha_"
-                fun genAlphaTaskId(randomPart: String = UUID.randomUUID().toString()): String {
+                const val alphaTask = "at_"
+                const val alphaTaskProject = "atp_"
+                const val alphaTaskGroup = "atg_"
+                fun genTaskId(randomPart: String = UUID.randomUUID().toString()): String {
                     return "${alphaTask}${randomPart}"
+                }
+
+                fun genTaskProjectId(randomPart: String = UUID.randomUUID().toString()): String {
+                    return "${alphaTaskProject}${randomPart}"
+                }
+
+                fun genTaskGroupId(randomPart: String = UUID.randomUUID().toString()): String {
+                    return "${alphaTaskGroup}${randomPart}"
                 }
             }
 

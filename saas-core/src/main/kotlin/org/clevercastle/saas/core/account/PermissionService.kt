@@ -15,7 +15,7 @@ class PermissionService {
 
         val userWorkspaceMappingEntity = workspaceService.getUserWorkspaceMapping(userId, workspaceId)
                 ?: if (throwException) {
-                    throw HttpResponseException(Response.Status.FORBIDDEN.statusCode, null, "User is not a member of the workspace")
+                    throw HttpResponseException(Response.Status.FORBIDDEN.statusCode, null, "Operator is not a member of the workspace")
                 } else {
                     return false
                 }
@@ -23,9 +23,31 @@ class PermissionService {
             return true
         }
         if (throwException) {
-            throw HttpResponseException(Response.Status.FORBIDDEN.statusCode, null, "User does not have permission to access the workspace")
+            throw HttpResponseException(Response.Status.FORBIDDEN.statusCode, null, "Operator does not have permission to do the action on this workspace")
         } else {
             return false
         }
     }
+
+//    fun canAccessTeam(userId: String, workspaceId: String, ownerId: String, ownerType: ResourceOwnerType, throwException: Boolean = true): Boolean {
+//        val mapping = workspaceService.getUserWorkspaceMapping(userId, workspaceId)
+//                ?: if (throwException) {
+//                    throw HttpResponseException(Response.Status.FORBIDDEN.statusCode, null, "Operator does not have permission to access the workspace")
+//                } else {
+//                    return false
+//                }
+//        when (ownerType) {
+//            ResourceOwnerType.User -> {
+//                if (mapping.workspaceUserId == ownerId) {
+//                    return true
+//                }
+//            }
+//            ResourceOwnerType.Team -> {
+//                if () {
+//                    return true
+//                }
+//            }
+//        }
+//    }
+
 }
