@@ -2,10 +2,10 @@ package org.clevercastle.saas.core.model.alpha
 
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheCompanionBase
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheRepositoryBase
+import org.clevercastle.saas.base.IdUtil
+import org.clevercastle.saas.base.ResourceOwnerType
+import org.clevercastle.saas.base.ResourceOwnerTypeConverter
 import org.clevercastle.saas.core.model.BaseEntity
-import org.clevercastle.saas.core.model.EntityUtil
-import org.clevercastle.saas.core.model.ResourceOwnerType
-import org.clevercastle.saas.core.model.ResourceOwnerTypeConverter
 import javax.enterprise.context.ApplicationScoped
 import javax.persistence.Convert
 import javax.persistence.Entity
@@ -16,7 +16,7 @@ class AlphaTaskProjectEntity : BaseEntity() {
     companion object : PanacheCompanionBase<AlphaTaskProjectEntity, String>
 
     @Id
-    var id: String = EntityUtil.Companion.Alpha.genTaskId()
+    var id: String = IdUtil.Companion.Alpha.genTaskId()
 
     lateinit var workspaceId: String
     lateinit var name: String

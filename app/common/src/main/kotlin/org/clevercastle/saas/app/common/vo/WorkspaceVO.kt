@@ -1,9 +1,9 @@
 package org.clevercastle.saas.app.common.vo
 
+import org.clevercastle.saas.base.account.WorkspaceUserRole
 import org.clevercastle.saas.core.account.Workspace
 import org.clevercastle.saas.core.account.WorkspaceTeam
 import org.clevercastle.saas.core.account.WorkspaceUser
-import org.clevercastle.saas.core.model.account.WorkspaceUserRole
 import java.time.OffsetDateTime
 
 class WorkspaceVO {

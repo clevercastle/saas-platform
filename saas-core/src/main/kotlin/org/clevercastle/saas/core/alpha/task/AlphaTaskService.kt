@@ -1,10 +1,10 @@
 package org.clevercastle.saas.core.alpha.task
 
+import org.clevercastle.saas.base.IdUtil
+import org.clevercastle.saas.base.alpha.AlphaTaskStatus
 import org.clevercastle.saas.core.alpha.task.bo.CreateAlphaTaskBO
-import org.clevercastle.saas.core.model.EntityUtil
 import org.clevercastle.saas.core.model.alpha.AlphaTaskEntity
 import org.clevercastle.saas.core.model.alpha.AlphaTaskEntityRepository
-import org.clevercastle.saas.core.model.alpha.AlphaTaskStatus
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
 import javax.transaction.Transactional
@@ -25,7 +25,7 @@ class AlphaTaskService {
     @Transactional
     fun createTask(createAlphaTaskBO: CreateAlphaTaskBO): AlphaTask {
         val alphaTaskEntity = AlphaTaskEntity().apply {
-            this.id = EntityUtil.Companion.Alpha.genTaskId()
+            this.id = IdUtil.Companion.Alpha.genTaskId()
             this.workspaceId = createAlphaTaskBO.workspaceId
 
             this.ownerId = createAlphaTaskBO.ownerId
@@ -36,7 +36,7 @@ class AlphaTaskService {
             this.name = createAlphaTaskBO.name
             this.taskPath = createAlphaTaskBO.taskPath
 
-            this.groupId = EntityUtil.Companion.Alpha.genTaskGroupId()
+            this.groupId = IdUtil.Companion.Alpha.genTaskGroupId()
             this.version = 0
 
             this.status = AlphaTaskStatus.Created
@@ -52,7 +52,7 @@ class AlphaTaskService {
     @Transactional
     fun createVersion(originalTask: AlphaTask): AlphaTask {
         val alphaTaskEntity = AlphaTaskEntity().apply {
-            this.id = EntityUtil.Companion.Alpha.genTaskId()
+            this.id = IdUtil.Companion.Alpha.genTaskId()
             this.workspaceId = originalTask.workspaceId
 
             this.ownerId = originalTask.ownerId

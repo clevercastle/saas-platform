@@ -1,7 +1,10 @@
 package org.clevercastle.saas.app.common.registration
 
+import org.clevercastle.saas.core.account.AuthService
+import org.clevercastle.saas.core.iam.IAMService
 import org.clevercastle.saas.core.iam.IAMServiceAuth0
 import org.eclipse.microprofile.config.inject.ConfigProperty
+import javax.annotation.PostConstruct
 import javax.enterprise.context.ApplicationScoped
 import javax.enterprise.inject.Produces
 
@@ -26,7 +29,12 @@ class AuthRegistration {
     private lateinit var auth0Connection: String
 
     @Produces
-    fun iamServiceAuth0(): IAMServiceAuth0 {
+    fun iamServiceAuth0(): IAMService {
         return IAMServiceAuth0(auth0Audience, auth0Scope, auth0Connection, auth0Domain, auth0ClientId, auth0ClientSecret)
+    }
+
+    @PostConstruct
+    fun init(authService: AuthService, iamServiceAuth0: IAMService) {
+        authService.iamService = iamServiceAuth0
     }
 }

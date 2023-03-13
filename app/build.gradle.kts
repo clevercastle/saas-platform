@@ -1,9 +1,8 @@
 subprojects {
     if ("common".equals(name)) {
         dependencies {
+            implementation(project(":saas-base"))
             implementation(project(":saas-core"))
-            implementation(project(":saas-model"))
-            implementation(project(":saas-util"))
 
             implementation("com.auth0:java-jwt:4.2.2")
             implementation("com.auth0:jwks-rsa:0.22.0")
@@ -16,11 +15,10 @@ subprojects {
     if (!"common".equals(name)) {
         dependencies {
             implementation(project(":app:common"))
+            implementation(project(":saas-base"))
             implementation(project(":saas-core"))
-            implementation(project(":saas-model"))
-            implementation(project(":saas-util"))
-            // api security
 
+            // api security
             implementation("io.quarkus:quarkus-hibernate-validator")
             implementation("io.quarkus:quarkus-resteasy-jackson")
             implementation("io.quarkus:quarkus-resteasy")

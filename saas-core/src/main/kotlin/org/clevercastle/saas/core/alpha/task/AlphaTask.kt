@@ -1,10 +1,10 @@
 package org.clevercastle.saas.core.alpha.task
 
-import org.clevercastle.saas.core.model.EntityUtil
-import org.clevercastle.saas.core.model.ResourceOwnerType
-import org.clevercastle.saas.core.model.ResourceOwnerTypeConverter
+import org.clevercastle.saas.base.IdUtil
+import org.clevercastle.saas.base.ResourceOwnerType
+import org.clevercastle.saas.base.ResourceOwnerTypeConverter
+import org.clevercastle.saas.base.alpha.AlphaTaskStatus
 import org.clevercastle.saas.core.model.alpha.AlphaTaskEntity
-import org.clevercastle.saas.core.model.alpha.AlphaTaskStatus
 import javax.persistence.Convert
 
 class AlphaTask {
@@ -28,7 +28,7 @@ class AlphaTask {
         }
     }
 
-    var id: String = EntityUtil.Companion.Alpha.genTaskId()
+    var id: String = IdUtil.Companion.Alpha.genTaskId()
 
     lateinit var workspaceId: String
 

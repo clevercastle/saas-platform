@@ -1,7 +1,7 @@
 package org.clevercastle.saas.core.account
 
+import org.clevercastle.saas.base.account.WorkspaceUserRole
 import org.clevercastle.saas.core.internal.exception.HttpResponseException
-import org.clevercastle.saas.core.model.account.WorkspaceUserRole
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
 import javax.ws.rs.core.Response

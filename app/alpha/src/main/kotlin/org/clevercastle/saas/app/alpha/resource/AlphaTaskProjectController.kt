@@ -1,11 +1,11 @@
 package org.clevercastle.saas.app.alpha.resource
 
 import org.apache.commons.lang3.StringUtils
+import org.clevercastle.saas.base.ResourceOwnerType
 import org.clevercastle.saas.core.alpha.task.AlphaTaskProject
 import org.clevercastle.saas.core.alpha.task.AlphaTaskProjectService
 import org.clevercastle.saas.core.alpha.task.bo.CreateAlphaTaskProjectBO
 import org.clevercastle.saas.core.internal.auth.SecurityService
-import org.clevercastle.saas.core.model.ResourceOwnerType
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
 import javax.validation.Valid

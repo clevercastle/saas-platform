@@ -2,8 +2,10 @@ package org.clevercastle.saas.core.model.account
 
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheCompanionBase
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheRepositoryBase
+import org.clevercastle.saas.base.IdUtil
+import org.clevercastle.saas.base.account.OidcProvider
+import org.clevercastle.saas.base.account.OidcProviderHibernateConverter
 import org.clevercastle.saas.core.model.BaseEntity
-import org.clevercastle.saas.core.model.EntityUtil
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
 import javax.persistence.Convert
@@ -15,7 +17,7 @@ class UserEntity : BaseEntity() {
     companion object : PanacheCompanionBase<UserEntity, String>
 
     @Id
-    var id: String = EntityUtil.Companion.Account.genUserId()
+    var id: String = IdUtil.Companion.Account.genUserId()
     lateinit var email: String
 }
 

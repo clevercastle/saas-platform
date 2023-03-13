@@ -2,8 +2,10 @@ package org.clevercastle.saas.core.model.account
 
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheCompanionBase
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheRepositoryBase
+import org.clevercastle.saas.base.IdUtil
+import org.clevercastle.saas.base.account.WorkspaceUserRole
+import org.clevercastle.saas.base.account.WorkspaceUserRoleHibernateConverter
 import org.clevercastle.saas.core.model.BaseEntity
-import org.clevercastle.saas.core.model.EntityUtil
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
 import javax.persistence.Convert
@@ -16,7 +18,7 @@ class UserWorkspaceMappingEntity : BaseEntity() {
     companion object : PanacheCompanionBase<UserWorkspaceMappingEntity, String>
 
     @Id
-    var id: String = "${EntityUtil.Companion.Account.userWorkspaceMapping}${UUID.randomUUID()}"
+    var id: String = "${IdUtil.Companion.Account.userWorkspaceMapping}${UUID.randomUUID()}"
     lateinit var userId: String
     lateinit var workspaceId: String
     lateinit var workspaceUserName: String

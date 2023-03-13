@@ -1,4 +1,4 @@
-package org.clevercastle.saas.core.model
+package org.clevercastle.saas.base
 
 import javax.persistence.AttributeConverter
 

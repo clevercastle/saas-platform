@@ -1,7 +1,7 @@
 package org.clevercastle.saas.core.alpha.task
 
+import org.clevercastle.saas.base.IdUtil
 import org.clevercastle.saas.core.alpha.task.bo.CreateAlphaTaskProjectBO
-import org.clevercastle.saas.core.model.EntityUtil
 import org.clevercastle.saas.core.model.alpha.AlphaTaskProjectEntity
 import org.clevercastle.saas.core.model.alpha.AlphaTaskProjectEntityRepository
 import javax.enterprise.context.ApplicationScoped
@@ -16,7 +16,7 @@ class AlphaTaskProjectService {
     @Transactional
     fun createTaskProject(bo: CreateAlphaTaskProjectBO): AlphaTaskProject {
         val entity = AlphaTaskProjectEntity().apply {
-            this.id = EntityUtil.Companion.Alpha.genTaskProjectId()
+            this.id = IdUtil.Companion.Alpha.genTaskProjectId()
             this.workspaceId = bo.workspaceId
             this.ownerId = bo.ownerId
             this.ownerType = bo.ownerType

@@ -2,8 +2,8 @@ package org.clevercastle.saas.core.iam
 
 import com.auth0.client.auth.AuthAPI
 import com.auth0.exception.APIException
+import org.clevercastle.saas.base.TimeUtils
 import org.clevercastle.saas.core.jwt.TokenHolder
-import org.clevercastle.saas.util.TimeUtils
 
 class IAMServiceAuth0(
         private val auth0Audience: String,

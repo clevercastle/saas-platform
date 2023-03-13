@@ -1,9 +1,13 @@
 package org.clevercastle.saas.core.account
 
+import org.clevercastle.saas.base.TimeUtils
+import org.clevercastle.saas.base.account.OidcProvider
 import org.clevercastle.saas.core.iam.IAMService
 import org.clevercastle.saas.core.jwt.TokenHolder
-import org.clevercastle.saas.core.model.account.*
-import org.clevercastle.saas.util.TimeUtils
+import org.clevercastle.saas.core.model.account.UserEntity
+import org.clevercastle.saas.core.model.account.UserEntityRepository
+import org.clevercastle.saas.core.model.account.UserOIDCMapping
+import org.clevercastle.saas.core.model.account.UserOIDCMappingRepository
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
 import javax.transaction.Transactional
@@ -19,8 +23,7 @@ class AuthService {
     @Inject
     private lateinit var workspaceService: WorkspaceService
 
-    @Inject
-    private lateinit var iamService: IAMService
+    lateinit var iamService: IAMService
 
     /**
      *  1. create user in auth0...
@@ -30,7 +33,7 @@ class AuthService {
      */
     @Transactional
     fun register(email: String, password: String, name: String): User {
-        val identityServerUser = iamService.registerUser(email, password, mapOf())
+        val identityServerUser = iamService!!.registerUser(email, password, mapOf())
         val userEntity = UserEntity().apply {
             this.email = email
             this.createdAt = TimeUtils.now()
@@ -53,6 +56,6 @@ class AuthService {
     }
 
     fun login(email: String, password: String): TokenHolder {
-        return iamService.login(email, password)
+        return iamService!!.login(email, password)
     }
 }

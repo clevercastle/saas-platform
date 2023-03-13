@@ -1,8 +1,8 @@
 package org.clevercastle.saas.core.model.account
 
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheCompanionBase
+import org.clevercastle.saas.base.IdUtil
 import org.clevercastle.saas.core.model.BaseEntity
-import org.clevercastle.saas.core.model.EntityUtil
 import javax.enterprise.context.ApplicationScoped
 import javax.persistence.Entity
 import javax.persistence.Id
@@ -12,7 +12,7 @@ class WorkspaceEntity : BaseEntity() {
     companion object : PanacheCompanionBase<WorkspaceEntity, String>
 
     @Id
-    var id: String = EntityUtil.Companion.Account.genWorkspaceId()
+    var id: String = IdUtil.Companion.Account.genWorkspaceId()
     var name: String? = null
 }
 

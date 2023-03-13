@@ -1,4 +1,4 @@
-package org.clevercastle.saas.util
+package org.clevercastle.saas.base
 
 import java.time.OffsetDateTime
 import java.time.ZoneOffset

@@ -1,7 +1,7 @@
 package org.clevercastle.saas.core.alpha.task
 
-import org.clevercastle.saas.core.model.EntityUtil
-import org.clevercastle.saas.core.model.ResourceOwnerType
+import org.clevercastle.saas.base.IdUtil
+import org.clevercastle.saas.base.ResourceOwnerType
 import org.clevercastle.saas.core.model.alpha.AlphaTaskProjectEntity
 
 class AlphaTaskProject {
@@ -18,7 +18,7 @@ class AlphaTaskProject {
         }
     }
 
-    var id: String = EntityUtil.Companion.Alpha.genTaskId()
+    var id: String = IdUtil.Companion.Alpha.genTaskId()
 
     lateinit var workspaceId: String
     lateinit var name: String

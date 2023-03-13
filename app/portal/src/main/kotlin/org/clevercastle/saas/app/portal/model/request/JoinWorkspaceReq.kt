@@ -1,7 +1,7 @@
 package org.clevercastle.saas.app.portal.model.request
 
+import org.clevercastle.saas.base.account.WorkspaceUserRole
 import org.clevercastle.saas.core.internal.validation.EnumValidator
-import org.clevercastle.saas.core.model.account.WorkspaceUserRole
 import javax.validation.constraints.NotBlank
 
 data class JoinWorkspaceReq(

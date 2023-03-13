@@ -1,6 +1,7 @@
-package org.clevercastle.saas.core.model.alpha
+package org.clevercastle.saas.base.alpha
 
-import org.clevercastle.saas.core.model.account.EnumConverter
+import org.clevercastle.saas.base.EnumConverter
+
 
 class AlphaTaskStatusHibernateConverter : EnumConverter<AlphaTaskStatus>(AlphaTaskStatus::class.java)
 

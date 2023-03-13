@@ -1,13 +1,13 @@
 package org.clevercastle.saas.app.alpha.resource
 
 import org.apache.commons.lang3.StringUtils
+import org.clevercastle.saas.base.IdUtil
+import org.clevercastle.saas.base.ResourceOwnerType
 import org.clevercastle.saas.core.alpha.task.AlphaTask
 import org.clevercastle.saas.core.alpha.task.AlphaTaskService
 import org.clevercastle.saas.core.alpha.task.bo.CreateAlphaTaskBO
 import org.clevercastle.saas.core.internal.auth.SecurityService
 import org.clevercastle.saas.core.internal.exception.NotFoundException
-import org.clevercastle.saas.core.model.EntityUtil
-import org.clevercastle.saas.core.model.ResourceOwnerType
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
 import javax.validation.Valid
@@ -43,7 +43,7 @@ class AlphaTaskController {
             this.projectId = projectId
             this.name = req.name!!
             this.taskPath = req.taskPath!!
-            this.groupId = EntityUtil.Companion.Alpha.genTaskGroupId()
+            this.groupId = IdUtil.Companion.Alpha.genTaskGroupId()
         }
         return alphaTaskService.createTask(createAlphaTaskBO)
     }

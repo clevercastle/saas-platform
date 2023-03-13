@@ -1,6 +1,6 @@
 package org.clevercastle.saas.core.alpha.task.bo
 
-import org.clevercastle.saas.core.model.ResourceOwnerType
+import org.clevercastle.saas.base.ResourceOwnerType
 
 class CreateAlphaTaskProjectBO {
     lateinit var workspaceId: String

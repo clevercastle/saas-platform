@@ -1,11 +1,13 @@
 package org.clevercastle.saas.core.account
 
+import org.clevercastle.saas.base.IdUtil
+import org.clevercastle.saas.base.TimeUtils
+import org.clevercastle.saas.base.account.UserInWorkspaceTeamRole
+import org.clevercastle.saas.base.account.WorkspaceUserRole
 import org.clevercastle.saas.core.internal.auth.SecurityService
 import org.clevercastle.saas.core.internal.exception.BadRequestException
 import org.clevercastle.saas.core.internal.exception.NotFoundException
-import org.clevercastle.saas.core.model.EntityUtil
 import org.clevercastle.saas.core.model.account.*
-import org.clevercastle.saas.util.TimeUtils
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
 import javax.transaction.RollbackException
@@ -32,7 +34,7 @@ class WorkspaceService {
 
     @Transactional
     fun createWorkspace(userId: String, workspaceName: String, workspaceUserName: String): Workspace {
-        val workspaceId = EntityUtil.Companion.Account.genWorkspaceId()
+        val workspaceId = IdUtil.Companion.Account.genWorkspaceId()
         val workspaceEntity = WorkspaceEntity().apply {
             this.id = workspaceId
             this.name = workspaceName
