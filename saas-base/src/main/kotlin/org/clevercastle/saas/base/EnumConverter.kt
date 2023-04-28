@@ -35,3 +35,21 @@ open class MapConverter<T : Map<String, *>> : AttributeConverter<T, String?> {
         return JsonUtils.fromJson(dbData!!, Map::class) as T
     }
 }
+
+open class ListConverter<T : List<String>?> : AttributeConverter<T?, String?> {
+
+    override fun convertToDatabaseColumn(attribute: T?): String? {
+        if (attribute == null) {
+            return null
+        }
+        return attribute.joinToString { it.toString() }
+    }
+
+    override fun convertToEntityAttribute(dbData: String?): T? {
+        if (dbData == null) {
+            return null
+        }
+        @Suppress("UNCHECKED_CAST")
+        return dbData.split(",") as T
+    }
+}

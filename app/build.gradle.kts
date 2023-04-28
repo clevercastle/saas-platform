@@ -17,6 +17,7 @@ subprojects {
             implementation(project(":app:common"))
             implementation(project(":saas-base"))
             implementation(project(":saas-core"))
+            implementation(project(":saas-model"))
 
             // api security
             implementation("io.quarkus:quarkus-hibernate-validator")

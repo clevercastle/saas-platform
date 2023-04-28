@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm") version "1.8.10"
     kotlin("plugin.allopen") version "1.8.10"
+    kotlin("kapt") version "1.8.10"
     id("io.quarkus") apply false
 }
 
@@ -24,6 +25,7 @@ allprojects {
     apply(plugin = "kotlin")
     apply(plugin = "io.quarkus")
     apply(plugin = "kotlin-allopen")
+    apply(plugin = "org.jetbrains.kotlin.kapt")
 
     java {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -37,6 +39,10 @@ allprojects {
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions.jvmTarget = JavaVersion.VERSION_17.toString()
         kotlinOptions.javaParameters = true
+    }
+
+    tasks.withType<JavaCompile> {
+        options.compilerArgs = listOf("-Amapstruct.verbose=true")
     }
 
     buildDir = File("${rootProject.buildDir.path}/${project.name}")
@@ -69,6 +75,9 @@ allprojects {
 
 
         implementation("org.apache.commons:commons-lang3:3.12.0")
+
+        implementation("org.mapstruct:mapstruct:1.5.5.Final")
+        kapt("org.mapstruct:mapstruct-processor:1.5.5.Final")
 
         implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
         implementation("io.quarkus:quarkus-kotlin")

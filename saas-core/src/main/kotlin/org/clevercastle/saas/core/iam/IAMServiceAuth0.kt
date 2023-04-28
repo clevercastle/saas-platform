@@ -5,6 +5,7 @@ import com.auth0.exception.APIException
 import org.clevercastle.saas.base.TimeUtils
 import org.clevercastle.saas.core.jwt.TokenHolder
 
+
 class IAMServiceAuth0(
         private val auth0Audience: String,
         private val auth0Scope: String,
@@ -29,9 +30,11 @@ class IAMServiceAuth0(
                 "invalid_password" -> {
                     throw RuntimeException("Password is not strong enough")
                 }
+
                 "invalid_signup" -> {
                     throw RuntimeException("Fail to create the user")
                 }
+
                 else -> {
                     throw e
                 }

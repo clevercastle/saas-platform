@@ -39,6 +39,6 @@ class UserEntityRepository : PanacheRepositoryBase<UserEntity, String>
 @ApplicationScoped
 class UserOIDCMappingRepository : PanacheRepositoryBase<UserOIDCMapping, String> {
     fun getUserIdByUserSub(userSub: String): String? {
-        return find("user_sub", userSub).firstResult()?.userId
+        return find("userSub = ?1", userSub).firstResult()?.userId
     }
 }
