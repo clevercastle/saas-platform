@@ -1,17 +1,17 @@
 package org.clevercastle.saas.app.alpha.resource
 
+import jakarta.enterprise.context.ApplicationScoped
+import jakarta.inject.Inject
+import jakarta.validation.Valid
+import jakarta.validation.constraints.NotBlank
+import jakarta.ws.rs.*
+import jakarta.ws.rs.core.MediaType
 import org.apache.commons.lang3.StringUtils
 import org.clevercastle.saas.base.ResourceOwnerType
 import org.clevercastle.saas.core.alpha.task.AlphaTaskProject
 import org.clevercastle.saas.core.alpha.task.AlphaTaskProjectService
 import org.clevercastle.saas.core.alpha.task.bo.CreateAlphaTaskProjectBO
 import org.clevercastle.saas.core.internal.auth.SecurityService
-import javax.enterprise.context.ApplicationScoped
-import javax.inject.Inject
-import javax.validation.Valid
-import javax.validation.constraints.NotBlank
-import javax.ws.rs.*
-import javax.ws.rs.core.MediaType
 
 @Path("alpha/project")
 @ApplicationScoped
@@ -52,9 +52,9 @@ class AlphaTaskProjectController {
 }
 
 data class CreateProjectReq(
-        @field:NotBlank(message = "Team id is required")
-        val teamId: String,
-        @field:NotBlank(message = "Name is required")
-        val name: String?,
-        val liked: Boolean = false,
+    @field:NotBlank(message = "Team id is required")
+    val teamId: String,
+    @field:NotBlank(message = "Name is required")
+    val name: String?,
+    val liked: Boolean = false,
 )

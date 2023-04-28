@@ -1,5 +1,9 @@
 package org.clevercastle.saas.core.account
 
+import jakarta.enterprise.context.ApplicationScoped
+import jakarta.inject.Inject
+import jakarta.transaction.RollbackException
+import jakarta.transaction.Transactional
 import org.clevercastle.saas.base.IdUtil
 import org.clevercastle.saas.base.TimeUtils
 import org.clevercastle.saas.base.account.UserInWorkspaceTeamRole
@@ -8,10 +12,6 @@ import org.clevercastle.saas.core.internal.auth.SecurityService
 import org.clevercastle.saas.core.internal.exception.BadRequestException
 import org.clevercastle.saas.core.internal.exception.NotFoundException
 import org.clevercastle.saas.core.model.account.*
-import javax.enterprise.context.ApplicationScoped
-import javax.inject.Inject
-import javax.transaction.RollbackException
-import javax.transaction.Transactional
 
 @ApplicationScoped
 class WorkspaceService {

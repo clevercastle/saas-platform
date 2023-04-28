@@ -21,8 +21,8 @@ quarkus:
 saas:
     iam:
         auth0:
-            domain: dev-saas-platform.us.auth0.com
-            issuer: https://dev-saas-platform.us.auth0.com/
-            audience: https://dev-saas-platform.us.auth0.com/api/v2/
-            clientId: HXdVWf2SpkjhnwqZppZTm2AXDSQVrlAJ
-            clientSecret: QV54zoCSxuVBW-IfHrhPku_BID4GhVKfb087uIsXJxN3LMJ8zESYLdLWVVqRWmkB
+            domain: domain
+            issuer: issuer
+            audience: audience
+            clientId: clientId
+            clientSecret: clientSecret

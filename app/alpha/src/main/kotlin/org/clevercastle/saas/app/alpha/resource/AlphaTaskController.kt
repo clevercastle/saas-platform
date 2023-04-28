@@ -1,5 +1,11 @@
 package org.clevercastle.saas.app.alpha.resource
 
+import jakarta.enterprise.context.ApplicationScoped
+import jakarta.inject.Inject
+import jakarta.validation.Valid
+import jakarta.validation.constraints.NotBlank
+import jakarta.ws.rs.*
+import jakarta.ws.rs.core.MediaType
 import org.apache.commons.lang3.StringUtils
 import org.clevercastle.saas.base.IdUtil
 import org.clevercastle.saas.base.ResourceOwnerType
@@ -8,12 +14,6 @@ import org.clevercastle.saas.core.alpha.task.AlphaTaskService
 import org.clevercastle.saas.core.alpha.task.bo.CreateAlphaTaskBO
 import org.clevercastle.saas.core.internal.auth.SecurityService
 import org.clevercastle.saas.core.internal.exception.NotFoundException
-import javax.enterprise.context.ApplicationScoped
-import javax.inject.Inject
-import javax.validation.Valid
-import javax.validation.constraints.NotBlank
-import javax.ws.rs.*
-import javax.ws.rs.core.MediaType
 
 @Path("alpha/project/{projectId}")
 @ApplicationScoped
@@ -67,9 +67,9 @@ class AlphaTaskController {
 }
 
 data class CreateTaskReq(
-        val teamId: String?,
-        @field:NotBlank(message = "Task name is required")
-        val name: String?,
-        @field:NotBlank(message = "Task path is required")
-        val taskPath: String?,
+    val teamId: String?,
+    @field:NotBlank(message = "Task name is required")
+    val name: String?,
+    @field:NotBlank(message = "Task path is required")
+    val taskPath: String?,
 )

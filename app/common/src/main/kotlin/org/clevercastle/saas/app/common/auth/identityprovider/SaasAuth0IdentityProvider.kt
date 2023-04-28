@@ -9,6 +9,8 @@ import io.smallrye.mutiny.Uni
 import io.smallrye.mutiny.infrastructure.Infrastructure
 import io.smallrye.mutiny.unchecked.Unchecked
 import io.vertx.ext.web.RoutingContext
+import jakarta.enterprise.context.ApplicationScoped
+import jakarta.inject.Inject
 import org.clevercastle.saas.app.common.auth.AbstractIdentityProvider
 import org.clevercastle.saas.app.common.auth.Auth0JWTPayload
 import org.clevercastle.saas.app.common.auth.JWTPayload
@@ -16,8 +18,6 @@ import org.clevercastle.saas.app.common.auth.authrequest.SaasTokenAuthentication
 import org.clevercastle.saas.core.account.UserService
 import org.clevercastle.saas.core.internal.auth.SaasPrincipal
 import org.eclipse.microprofile.config.inject.ConfigProperty
-import javax.enterprise.context.ApplicationScoped
-import javax.inject.Inject
 
 
 @ApplicationScoped

@@ -1,5 +1,12 @@
 package org.clevercastle.saas.app.portal.resource
 
+import jakarta.annotation.security.PermitAll
+import jakarta.enterprise.context.ApplicationScoped
+import jakarta.inject.Inject
+import jakarta.transaction.Transactional
+import jakarta.validation.Valid
+import jakarta.ws.rs.*
+import jakarta.ws.rs.core.MediaType
 import org.apache.commons.lang3.StringUtils
 import org.clevercastle.saas.app.common.vo.UserVO
 import org.clevercastle.saas.app.portal.model.request.RegisterUserReq
@@ -7,13 +14,6 @@ import org.clevercastle.saas.core.account.AuthService
 import org.clevercastle.saas.core.jwt.TokenHolder
 import java.nio.charset.Charset
 import java.util.*
-import javax.annotation.security.PermitAll
-import javax.enterprise.context.ApplicationScoped
-import javax.inject.Inject
-import javax.transaction.Transactional
-import javax.validation.Valid
-import javax.ws.rs.*
-import javax.ws.rs.core.MediaType
 
 @Path("portal/auth")
 @ApplicationScoped
@@ -22,6 +22,12 @@ import javax.ws.rs.core.MediaType
 class AuthResource {
     @Inject
     private lateinit var authService: AuthService
+
+    constructor()
+
+    constructor(authService: AuthService) {
+        this.authService = authService
+    }
 
     @PermitAll
     @POST

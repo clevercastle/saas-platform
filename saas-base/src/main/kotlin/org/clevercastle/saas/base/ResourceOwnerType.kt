@@ -1,6 +1,6 @@
 package org.clevercastle.saas.base
 
-import javax.persistence.AttributeConverter
+import jakarta.persistence.AttributeConverter
 
 enum class ResourceOwnerType {
     Team,

@@ -1,11 +1,11 @@
 package org.clevercastle.saas.core.alpha.task
 
+import jakarta.persistence.Convert
 import org.clevercastle.saas.base.IdUtil
 import org.clevercastle.saas.base.ResourceOwnerType
 import org.clevercastle.saas.base.ResourceOwnerTypeConverter
 import org.clevercastle.saas.base.alpha.AlphaTaskStatus
 import org.clevercastle.saas.core.model.alpha.AlphaTaskEntity
-import javax.persistence.Convert
 
 class AlphaTask {
     companion object {

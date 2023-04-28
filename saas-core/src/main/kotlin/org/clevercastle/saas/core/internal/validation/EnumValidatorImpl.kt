@@ -1,10 +1,10 @@
 package org.clevercastle.saas.core.internal.validation
 
+import jakarta.validation.ConstraintValidator
+import jakarta.validation.ConstraintValidatorContext
 import org.apache.commons.lang3.StringUtils
 import java.lang.reflect.InvocationTargetException
 import java.util.*
-import javax.validation.ConstraintValidator
-import javax.validation.ConstraintValidatorContext
 import kotlin.reflect.KClass
 
 /**

@@ -1,6 +1,6 @@
 package org.clevercastle.saas.app.portal.model.request
 
-import javax.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotBlank
 
 data class CreateWorkspaceReq(
         @field:NotBlank(message = "Name is required")

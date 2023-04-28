@@ -2,14 +2,14 @@ package org.clevercastle.saas.core.model.account
 
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheCompanionBase
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheRepositoryBase
+import jakarta.enterprise.context.ApplicationScoped
+import jakarta.persistence.Convert
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
 import org.clevercastle.saas.base.IdUtil
 import org.clevercastle.saas.base.account.UserInWorkspaceTeamRole
 import org.clevercastle.saas.base.account.UserInWorkspaceTeamRoleHibernateConverter
 import org.clevercastle.saas.core.model.BaseEntity
-import javax.enterprise.context.ApplicationScoped
-import javax.persistence.Convert
-import javax.persistence.Entity
-import javax.persistence.Id
 
 
 @Entity(name = "workspace_team")

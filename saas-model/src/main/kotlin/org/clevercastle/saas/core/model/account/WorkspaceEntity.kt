@@ -1,11 +1,11 @@
 package org.clevercastle.saas.core.model.account
 
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheCompanionBase
+import jakarta.enterprise.context.ApplicationScoped
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
 import org.clevercastle.saas.base.IdUtil
 import org.clevercastle.saas.core.model.BaseEntity
-import javax.enterprise.context.ApplicationScoped
-import javax.persistence.Entity
-import javax.persistence.Id
 
 @Entity(name = "workspace")
 class WorkspaceEntity : BaseEntity() {

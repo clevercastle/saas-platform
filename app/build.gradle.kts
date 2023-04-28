@@ -25,7 +25,7 @@ subprojects {
             implementation("io.quarkus:quarkus-config-yaml")
 
             implementation("io.quarkus:quarkus-smallrye-openapi")
-            compileOnly("org.hibernate:hibernate-core")
+            compileOnly("org.hibernate:hibernate-core:6.2.1.Final")
         }
     }
 }

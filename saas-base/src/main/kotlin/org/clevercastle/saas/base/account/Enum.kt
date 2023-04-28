@@ -1,7 +1,7 @@
 package org.clevercastle.saas.base.account
 
+import jakarta.persistence.AttributeConverter
 import org.clevercastle.saas.base.EnumConverter
-import javax.persistence.AttributeConverter
 
 enum class OidcProvider {
     Auth0,

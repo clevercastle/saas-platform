@@ -1,12 +1,12 @@
 package org.clevercastle.saas.core.alpha.task
 
+import jakarta.enterprise.context.ApplicationScoped
+import jakarta.inject.Inject
+import jakarta.transaction.Transactional
 import org.clevercastle.saas.base.IdUtil
 import org.clevercastle.saas.core.alpha.task.bo.CreateAlphaTaskProjectBO
 import org.clevercastle.saas.core.model.alpha.AlphaTaskProjectEntity
 import org.clevercastle.saas.core.model.alpha.AlphaTaskProjectEntityRepository
-import javax.enterprise.context.ApplicationScoped
-import javax.inject.Inject
-import javax.transaction.Transactional
 
 @ApplicationScoped
 class AlphaTaskProjectService {

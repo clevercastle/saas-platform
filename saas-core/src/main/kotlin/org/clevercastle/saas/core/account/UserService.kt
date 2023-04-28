@@ -1,10 +1,10 @@
 package org.clevercastle.saas.core.account
 
+import jakarta.enterprise.context.ApplicationScoped
+import jakarta.enterprise.context.control.ActivateRequestContext
+import jakarta.inject.Inject
 import org.clevercastle.saas.core.model.account.UserEntityRepository
 import org.clevercastle.saas.core.model.account.UserOIDCMappingRepository
-import javax.enterprise.context.ApplicationScoped
-import javax.enterprise.context.control.ActivateRequestContext
-import javax.inject.Inject
 
 @ApplicationScoped
 class UserService {

@@ -1,8 +1,8 @@
 package org.clevercastle.saas.core.model
 
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheEntityBase
+import jakarta.persistence.MappedSuperclass
 import java.time.OffsetDateTime
-import javax.persistence.MappedSuperclass
 
 @MappedSuperclass
 open class BaseEntity : PanacheEntityBase {

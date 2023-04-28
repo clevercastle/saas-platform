@@ -1,12 +1,12 @@
 package org.clevercastle.saas.core.internal.auth
 
 import io.quarkus.security.identity.SecurityIdentity
+import jakarta.enterprise.context.ApplicationScoped
+import jakarta.inject.Inject
+import jakarta.ws.rs.core.Response
 import org.clevercastle.saas.core.account.UserWorkspaceMapping
 import org.clevercastle.saas.core.account.WorkspaceService
 import org.clevercastle.saas.core.internal.exception.HttpResponseException
-import javax.enterprise.context.ApplicationScoped
-import javax.inject.Inject
-import javax.ws.rs.core.Response
 
 @ApplicationScoped
 class SecurityService {
