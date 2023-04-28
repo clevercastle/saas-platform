@@ -4,7 +4,7 @@ configurations {
     }
 }
 dependencies {
-    implementation(project(":saas-base"))
+    api(project(":saas-base"))
     implementation(project(":saas-model"))
 
     implementation("io.quarkus:quarkus-hibernate-orm-panache-kotlin")

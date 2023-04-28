@@ -32,6 +32,6 @@ open class MapConverter<T : Map<String, *>> : AttributeConverter<T, String?> {
 
     override fun convertToEntityAttribute(dbData: String?): T? {
         @Suppress("UNCHECKED_CAST")
-        return JsonUtils.fromJson(dbData!!, Map::class.java) as T
+        return JsonUtils.fromJson(dbData!!, Map::class) as T
     }
 }

@@ -1,5 +1,5 @@
 dependencies {
-    implementation(project(":saas-base"))
+    api(project(":saas-base"))
 
     implementation("io.quarkus:quarkus-jdbc-postgresql")
     implementation("io.quarkus:quarkus-hibernate-orm")

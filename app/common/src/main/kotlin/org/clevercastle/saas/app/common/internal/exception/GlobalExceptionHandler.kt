@@ -3,14 +3,14 @@ package org.clevercastle.saas.app.common.internal.exception
 import jakarta.ws.rs.core.Response
 import jakarta.ws.rs.ext.ExceptionMapper
 import jakarta.ws.rs.ext.Provider
+import org.clevercastle.saas.base.getLogger
 import org.clevercastle.saas.core.internal.exception.HttpResponseException
-import org.slf4j.LoggerFactory
 
 
 @Provider
 class GlobalExceptionHandler : ExceptionMapper<Exception> {
     companion object {
-        private val log = LoggerFactory.getLogger(GlobalExceptionHandler::class.java)
+        private val log = getLogger(GlobalExceptionHandler::class)
     }
 
     override fun toResponse(exception: Exception): Response? {
