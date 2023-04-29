@@ -4,8 +4,8 @@ import jakarta.enterprise.context.ApplicationScoped
 import jakarta.inject.Inject
 import jakarta.transaction.Transactional
 import org.clevercastle.saas.base.TimeUtils
-import org.clevercastle.saas.core.model.asyncconfirm.AsyncConfirmCodeEntity
-import org.clevercastle.saas.core.model.asyncconfirm.CodeType
+import org.clevercastle.saas.core.entity.asyncconfirm.AsyncConfirmCodeEntity
+import org.clevercastle.saas.core.entity.asyncconfirm.CodeType
 
 @ApplicationScoped
 class EmailAsyncConfirmCodeService {

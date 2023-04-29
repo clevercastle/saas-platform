@@ -5,12 +5,12 @@ import jakarta.inject.Inject
 import jakarta.transaction.Transactional
 import org.clevercastle.saas.base.TimeUtils
 import org.clevercastle.saas.base.account.OidcProvider
+import org.clevercastle.saas.core.entity.account.UserEntity
+import org.clevercastle.saas.core.entity.account.UserEntityRepository
+import org.clevercastle.saas.core.entity.account.UserOIDCMapping
+import org.clevercastle.saas.core.entity.account.UserOIDCMappingRepository
 import org.clevercastle.saas.core.iam.IAMService
 import org.clevercastle.saas.core.jwt.TokenHolder
-import org.clevercastle.saas.core.model.account.UserEntity
-import org.clevercastle.saas.core.model.account.UserEntityRepository
-import org.clevercastle.saas.core.model.account.UserOIDCMapping
-import org.clevercastle.saas.core.model.account.UserOIDCMappingRepository
 
 @ApplicationScoped
 class AuthService {
@@ -26,10 +26,10 @@ class AuthService {
 
     @Inject
     constructor(
-        userRepository: UserEntityRepository,
-        userOIDCMappingRepository: UserOIDCMappingRepository,
-        workspaceService: WorkspaceService,
-        iamService: IAMService
+            userRepository: UserEntityRepository,
+            userOIDCMappingRepository: UserOIDCMappingRepository,
+            workspaceService: WorkspaceService,
+            iamService: IAMService
     ) {
         this.userRepository = userRepository
         this.userOIDCMappingRepository = userOIDCMappingRepository

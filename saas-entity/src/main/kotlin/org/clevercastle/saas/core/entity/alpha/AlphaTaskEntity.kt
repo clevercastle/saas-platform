@@ -1,4 +1,4 @@
-package org.clevercastle.saas.core.model.alpha
+package org.clevercastle.saas.core.entity.alpha
 
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheCompanionBase
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheRepositoryBase
@@ -11,7 +11,7 @@ import org.clevercastle.saas.base.ResourceOwnerType
 import org.clevercastle.saas.base.ResourceOwnerTypeConverter
 import org.clevercastle.saas.base.alpha.AlphaTaskStatus
 import org.clevercastle.saas.base.alpha.AlphaTaskStatusHibernateConverter
-import org.clevercastle.saas.core.model.BaseEntity
+import org.clevercastle.saas.core.entity.BaseEntity
 
 @Entity(name = "alpha_task")
 class AlphaTaskEntity : BaseEntity() {

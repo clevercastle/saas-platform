@@ -8,10 +8,10 @@ import org.clevercastle.saas.base.IdUtil
 import org.clevercastle.saas.base.TimeUtils
 import org.clevercastle.saas.base.account.UserInWorkspaceTeamRole
 import org.clevercastle.saas.base.account.WorkspaceUserRole
+import org.clevercastle.saas.core.entity.account.*
 import org.clevercastle.saas.core.internal.auth.SecurityService
 import org.clevercastle.saas.core.internal.exception.BadRequestException
 import org.clevercastle.saas.core.internal.exception.NotFoundException
-import org.clevercastle.saas.core.model.account.*
 
 @ApplicationScoped
 class WorkspaceService {

@@ -2,10 +2,10 @@ package org.clevercastle.saas.core.account
 
 import org.clevercastle.saas.base.account.UserInWorkspaceTeamRole
 import org.clevercastle.saas.base.account.WorkspaceUserRole
-import org.clevercastle.saas.core.model.account.UserWorkspaceMappingEntity
-import org.clevercastle.saas.core.model.account.UserWorkspaceTeamMappingEntity
-import org.clevercastle.saas.core.model.account.WorkspaceEntity
-import org.clevercastle.saas.core.model.account.WorkspaceTeamEntity
+import org.clevercastle.saas.core.entity.account.UserWorkspaceMappingEntity
+import org.clevercastle.saas.core.entity.account.UserWorkspaceTeamMappingEntity
+import org.clevercastle.saas.core.entity.account.WorkspaceEntity
+import org.clevercastle.saas.core.entity.account.WorkspaceTeamEntity
 import java.time.OffsetDateTime
 
 class Workspace {

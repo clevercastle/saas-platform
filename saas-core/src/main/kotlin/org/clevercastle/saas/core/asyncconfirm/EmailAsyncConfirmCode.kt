@@ -1,7 +1,7 @@
 package org.clevercastle.saas.core.asyncconfirm
 
-import org.clevercastle.saas.core.model.asyncconfirm.AsyncConfirmCodeEntity
-import org.clevercastle.saas.core.model.asyncconfirm.CodeType
+import org.clevercastle.saas.core.entity.asyncconfirm.AsyncConfirmCodeEntity
+import org.clevercastle.saas.core.entity.asyncconfirm.CodeType
 import java.time.OffsetDateTime
 
 /**

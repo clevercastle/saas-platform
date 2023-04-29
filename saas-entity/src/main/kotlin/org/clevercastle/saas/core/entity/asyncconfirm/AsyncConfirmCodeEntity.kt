@@ -1,4 +1,4 @@
-package org.clevercastle.saas.core.model.asyncconfirm
+package org.clevercastle.saas.core.entity.asyncconfirm
 
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheRepositoryBase
 import jakarta.enterprise.context.ApplicationScoped
@@ -8,7 +8,7 @@ import jakarta.persistence.Id
 import org.clevercastle.saas.base.EnumConverter
 import org.clevercastle.saas.base.ListConverter
 import org.clevercastle.saas.base.MapConverter
-import org.clevercastle.saas.core.model.BaseEntity
+import org.clevercastle.saas.core.entity.BaseEntity
 import java.time.OffsetDateTime
 import java.util.*
 

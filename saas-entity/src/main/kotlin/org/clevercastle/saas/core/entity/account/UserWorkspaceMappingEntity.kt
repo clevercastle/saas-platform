@@ -1,4 +1,4 @@
-package org.clevercastle.saas.core.model.account
+package org.clevercastle.saas.core.entity.account
 
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheCompanionBase
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheRepositoryBase
@@ -9,7 +9,7 @@ import jakarta.persistence.Id
 import org.clevercastle.saas.base.IdUtil
 import org.clevercastle.saas.base.account.WorkspaceUserRole
 import org.clevercastle.saas.base.account.WorkspaceUserRoleHibernateConverter
-import org.clevercastle.saas.core.model.BaseEntity
+import org.clevercastle.saas.core.entity.BaseEntity
 import java.util.*
 
 

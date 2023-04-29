@@ -1,6 +1,6 @@
 package org.clevercastle.saas.core.account
 
-import org.clevercastle.saas.core.model.account.UserEntity
+import org.clevercastle.saas.core.entity.account.UserEntity
 import java.time.OffsetDateTime
 
 class User {

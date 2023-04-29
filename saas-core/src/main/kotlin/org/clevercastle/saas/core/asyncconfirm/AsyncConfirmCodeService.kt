@@ -2,8 +2,8 @@ package org.clevercastle.saas.core.asyncconfirm
 
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.inject.Inject
-import org.clevercastle.saas.core.model.asyncconfirm.AsyncConfirmCodeEntityRepository
-import org.clevercastle.saas.core.model.asyncconfirm.CodeType
+import org.clevercastle.saas.core.entity.asyncconfirm.AsyncConfirmCodeEntityRepository
+import org.clevercastle.saas.core.entity.asyncconfirm.CodeType
 
 @ApplicationScoped
 class AsyncConfirmCodeService {

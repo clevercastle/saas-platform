@@ -3,8 +3,8 @@ package org.clevercastle.saas.core.account
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.enterprise.context.control.ActivateRequestContext
 import jakarta.inject.Inject
-import org.clevercastle.saas.core.model.account.UserEntityRepository
-import org.clevercastle.saas.core.model.account.UserOIDCMappingRepository
+import org.clevercastle.saas.core.entity.account.UserEntityRepository
+import org.clevercastle.saas.core.entity.account.UserOIDCMappingRepository
 
 @ApplicationScoped
 class UserService {

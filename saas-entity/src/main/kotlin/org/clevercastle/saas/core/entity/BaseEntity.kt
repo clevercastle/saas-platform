@@ -1,4 +1,4 @@
-package org.clevercastle.saas.core.model
+package org.clevercastle.saas.core.entity
 
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheEntityBase
 import jakarta.persistence.MappedSuperclass

@@ -2,7 +2,7 @@ package org.clevercastle.saas.core.alpha.task
 
 import org.clevercastle.saas.base.IdUtil
 import org.clevercastle.saas.base.ResourceOwnerType
-import org.clevercastle.saas.core.model.alpha.AlphaTaskProjectEntity
+import org.clevercastle.saas.core.entity.alpha.AlphaTaskProjectEntity
 
 class AlphaTaskProject {
     companion object {

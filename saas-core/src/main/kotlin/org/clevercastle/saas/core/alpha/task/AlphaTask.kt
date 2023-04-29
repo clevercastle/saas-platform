@@ -5,7 +5,7 @@ import org.clevercastle.saas.base.IdUtil
 import org.clevercastle.saas.base.ResourceOwnerType
 import org.clevercastle.saas.base.ResourceOwnerTypeConverter
 import org.clevercastle.saas.base.alpha.AlphaTaskStatus
-import org.clevercastle.saas.core.model.alpha.AlphaTaskEntity
+import org.clevercastle.saas.core.entity.alpha.AlphaTaskEntity
 
 class AlphaTask {
     companion object {
