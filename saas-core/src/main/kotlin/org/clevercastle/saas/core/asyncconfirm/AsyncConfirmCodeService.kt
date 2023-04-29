@@ -2,8 +2,8 @@ package org.clevercastle.saas.core.asyncconfirm
 
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.inject.Inject
-import org.clevercastle.saas.core.entity.asyncconfirm.AsyncConfirmCodeEntityRepository
-import org.clevercastle.saas.core.entity.asyncconfirm.CodeType
+import org.clevercastle.saas.entity.core.asyncconfirm.AsyncConfirmCodeEntityRepository
+import org.clevercastle.saas.model.core.asyncconfirm.AsyncConfirmCode
 
 @ApplicationScoped
 class AsyncConfirmCodeService {
@@ -18,12 +18,12 @@ class AsyncConfirmCodeService {
     }
 
     fun createCode(asyncConfirmCode: AsyncConfirmCode) {
-        val codeEntity = AsyncConfirmCode.converter.convertToEntity(asyncConfirmCode)
+        val codeEntity = AsyncConfirmCodeConverter.converter.convertToEntity(asyncConfirmCode)
         asyncConfirmCodeEntityRepository.persist(codeEntity!!)
     }
 
-    fun getByCode(code: String, codeType: CodeType): AsyncConfirmCode? {
-        return AsyncConfirmCode.converter.fromEntity(asyncConfirmCodeEntityRepository.getByCodeAndType(code, codeType))
+    fun getByCode(code: String, codeType: AsyncConfirmCode.CodeType): AsyncConfirmCode? {
+        return AsyncConfirmCodeConverter.converter.fromEntity(asyncConfirmCodeEntityRepository.getByCodeAndType(code, codeType))
     }
 
 }

@@ -7,11 +7,11 @@ import jakarta.validation.constraints.NotBlank
 import jakarta.ws.rs.*
 import jakarta.ws.rs.core.MediaType
 import org.apache.commons.lang3.StringUtils
-import org.clevercastle.saas.base.ResourceOwnerType
-import org.clevercastle.saas.core.alpha.task.AlphaTaskProject
-import org.clevercastle.saas.core.alpha.task.AlphaTaskProjectService
-import org.clevercastle.saas.core.alpha.task.bo.CreateAlphaTaskProjectBO
+import org.clevercastle.saas.core.app.alpha.task.AlphaTaskProjectService
+import org.clevercastle.saas.core.app.alpha.task.bo.CreateAlphaTaskProjectBO
 import org.clevercastle.saas.core.internal.auth.SecurityService
+import org.clevercastle.saas.model.app.ResourceOwnerType
+import org.clevercastle.saas.model.app.alpha.AlphaTaskProject
 
 @Path("alpha/project")
 @ApplicationScoped

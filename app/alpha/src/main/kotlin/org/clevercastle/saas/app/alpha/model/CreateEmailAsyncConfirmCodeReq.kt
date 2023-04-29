@@ -1,6 +1,6 @@
 package org.clevercastle.saas.app.alpha.model
 
-import org.clevercastle.saas.core.asyncconfirm.EmailAsyncConfirmCode
+import org.clevercastle.saas.model.core.asyncconfirm.EmailAsyncConfirmCode
 import org.mapstruct.Mapper
 import org.mapstruct.factory.Mappers
 import java.time.OffsetDateTime

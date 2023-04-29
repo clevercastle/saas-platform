@@ -1,6 +1,6 @@
 package org.clevercastle.saas.app.common.vo
 
-import org.clevercastle.saas.core.account.User
+import org.clevercastle.saas.model.core.account.User
 import java.time.OffsetDateTime
 
 class UserVO {

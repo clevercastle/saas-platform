@@ -3,8 +3,8 @@ package org.clevercastle.saas.core.account
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.inject.Inject
 import jakarta.ws.rs.core.Response
-import org.clevercastle.saas.base.account.WorkspaceUserRole
 import org.clevercastle.saas.core.internal.exception.HttpResponseException
+import org.clevercastle.saas.model.core.account.WorkspaceUserRole
 
 @ApplicationScoped
 class PermissionService {

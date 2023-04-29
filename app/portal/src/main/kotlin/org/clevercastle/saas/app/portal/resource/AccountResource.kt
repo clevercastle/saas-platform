@@ -15,15 +15,15 @@ import org.clevercastle.saas.app.common.vo.WorkspaceTeamVO
 import org.clevercastle.saas.app.common.vo.WorkspaceVO
 import org.clevercastle.saas.app.portal.model.request.CreateWorkspaceReq
 import org.clevercastle.saas.app.portal.model.request.JoinWorkspaceReq
-import org.clevercastle.saas.base.account.UserInWorkspaceTeamRole
-import org.clevercastle.saas.base.account.WorkspaceUserRole
 import org.clevercastle.saas.core.account.PermissionService
 import org.clevercastle.saas.core.account.UserService
-import org.clevercastle.saas.core.account.UserWorkspaceTeam
 import org.clevercastle.saas.core.account.WorkspaceService
 import org.clevercastle.saas.core.internal.auth.SecurityService
 import org.clevercastle.saas.core.internal.exception.HttpResponseException
 import org.clevercastle.saas.core.internal.validation.EnumValidator
+import org.clevercastle.saas.model.core.account.UserInWorkspaceTeamRole
+import org.clevercastle.saas.model.core.account.UserWorkspaceTeam
+import org.clevercastle.saas.model.core.account.WorkspaceUserRole
 
 @Path("portal")
 @ApplicationScoped

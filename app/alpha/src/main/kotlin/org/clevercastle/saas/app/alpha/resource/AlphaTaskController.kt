@@ -8,12 +8,12 @@ import jakarta.ws.rs.*
 import jakarta.ws.rs.core.MediaType
 import org.apache.commons.lang3.StringUtils
 import org.clevercastle.saas.base.IdUtil
-import org.clevercastle.saas.base.ResourceOwnerType
-import org.clevercastle.saas.core.alpha.task.AlphaTask
-import org.clevercastle.saas.core.alpha.task.AlphaTaskService
-import org.clevercastle.saas.core.alpha.task.bo.CreateAlphaTaskBO
+import org.clevercastle.saas.core.app.alpha.task.AlphaTaskService
+import org.clevercastle.saas.core.app.alpha.task.bo.CreateAlphaTaskBO
 import org.clevercastle.saas.core.internal.auth.SecurityService
 import org.clevercastle.saas.core.internal.exception.NotFoundException
+import org.clevercastle.saas.model.app.ResourceOwnerType
+import org.clevercastle.saas.model.app.alpha.AlphaTask
 
 @Path("alpha/project/{projectId}")
 @ApplicationScoped

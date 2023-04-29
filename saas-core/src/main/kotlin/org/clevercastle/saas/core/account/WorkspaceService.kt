@@ -6,12 +6,11 @@ import jakarta.transaction.RollbackException
 import jakarta.transaction.Transactional
 import org.clevercastle.saas.base.IdUtil
 import org.clevercastle.saas.base.TimeUtils
-import org.clevercastle.saas.base.account.UserInWorkspaceTeamRole
-import org.clevercastle.saas.base.account.WorkspaceUserRole
-import org.clevercastle.saas.core.entity.account.*
 import org.clevercastle.saas.core.internal.auth.SecurityService
 import org.clevercastle.saas.core.internal.exception.BadRequestException
 import org.clevercastle.saas.core.internal.exception.NotFoundException
+import org.clevercastle.saas.entity.core.account.*
+import org.clevercastle.saas.model.core.account.*
 
 @ApplicationScoped
 class WorkspaceService {
@@ -56,7 +55,7 @@ class WorkspaceService {
         }
         workspaceEntityRepository.persist(workspaceEntity)
         userWorkspaceMappingEntityRepository.persist(userWorkspaceMappingEntity)
-        return Workspace.fromWorkspaceEntity(workspaceEntity)
+        return WorkspaceConverter.fromWorkspaceEntity(workspaceEntity)
     }
 
     fun listWorkspaceUsersByUserId(userId: String): List<WorkspaceUser> {
@@ -64,7 +63,7 @@ class WorkspaceService {
         val workspaces = workspaceEntityRepository.listWorkspaces(mappings.map { it.workspaceId })
         return mappings.map { mapping ->
             val workspace = workspaces.find { it.id == mapping.workspaceId }
-            WorkspaceUser.fromEntity(mapping, workspace!!.name!!)
+            WorkspaceUserConverter.fromEntity(mapping, workspace!!.name!!)
         }
     }
 
@@ -111,7 +110,7 @@ class WorkspaceService {
         val workspaceTeams = workspaceTeamEntityRepository.listWorkspaceTeams(mappings.map { it.workspaceTeamId })
         return workspaceTeams.map { team ->
             val mapping = mappings.find { it.workspaceTeamId == team.id }!!
-            UserWorkspaceTeam.fromEntity(team, mapping)
+            UserWorkspaceTeamConverter.fromEntity(team, mapping)
         }
     }
 
@@ -138,7 +137,7 @@ class WorkspaceService {
         }
         workspaceTeamEntity.persist()
         userWorkspaceTeamEntity.persist()
-        return WorkspaceTeam.fromEntity(workspaceTeamEntity)
+        return WorkspaceTeamConverter.fromEntity(workspaceTeamEntity)
     }
 
     @Transactional

@@ -5,8 +5,8 @@ import jakarta.inject.Inject
 import jakarta.ws.rs.*
 import jakarta.ws.rs.core.MediaType
 import org.clevercastle.saas.app.alpha.model.CreateEmailAsyncConfirmCodeReq
-import org.clevercastle.saas.core.asyncconfirm.EmailAsyncConfirmCode
 import org.clevercastle.saas.core.asyncconfirm.EmailAsyncConfirmCodeService
+import org.clevercastle.saas.model.core.asyncconfirm.EmailAsyncConfirmCode
 
 @Path("alpha/code")
 @ApplicationScoped

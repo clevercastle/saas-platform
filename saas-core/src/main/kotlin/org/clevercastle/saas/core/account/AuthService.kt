@@ -4,13 +4,14 @@ import jakarta.enterprise.context.ApplicationScoped
 import jakarta.inject.Inject
 import jakarta.transaction.Transactional
 import org.clevercastle.saas.base.TimeUtils
-import org.clevercastle.saas.base.account.OidcProvider
-import org.clevercastle.saas.core.entity.account.UserEntity
-import org.clevercastle.saas.core.entity.account.UserEntityRepository
-import org.clevercastle.saas.core.entity.account.UserOIDCMapping
-import org.clevercastle.saas.core.entity.account.UserOIDCMappingRepository
 import org.clevercastle.saas.core.iam.IAMService
 import org.clevercastle.saas.core.jwt.TokenHolder
+import org.clevercastle.saas.entity.core.account.UserEntity
+import org.clevercastle.saas.entity.core.account.UserEntityRepository
+import org.clevercastle.saas.entity.core.account.UserOIDCMapping
+import org.clevercastle.saas.entity.core.account.UserOIDCMappingRepository
+import org.clevercastle.saas.model.core.account.OidcProvider
+import org.clevercastle.saas.model.core.account.User
 
 @ApplicationScoped
 class AuthService {
@@ -65,7 +66,7 @@ class AuthService {
         }
         userRepository.persist(userEntity)
         userOIDCMappingRepository.persist(userOIDCMapping)
-        return User.fromUserEntity(userEntity)!!
+        return UserConverter.fromUserEntity(userEntity)!!
     }
 
     fun login(email: String, password: String): TokenHolder {

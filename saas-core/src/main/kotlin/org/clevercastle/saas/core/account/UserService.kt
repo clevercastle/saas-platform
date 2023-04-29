@@ -3,8 +3,9 @@ package org.clevercastle.saas.core.account
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.enterprise.context.control.ActivateRequestContext
 import jakarta.inject.Inject
-import org.clevercastle.saas.core.entity.account.UserEntityRepository
-import org.clevercastle.saas.core.entity.account.UserOIDCMappingRepository
+import org.clevercastle.saas.entity.core.account.UserEntityRepository
+import org.clevercastle.saas.entity.core.account.UserOIDCMappingRepository
+import org.clevercastle.saas.model.core.account.User
 
 @ApplicationScoped
 class UserService {
@@ -17,6 +18,8 @@ class UserService {
     @Inject
     private lateinit var workspaceService: WorkspaceService
 
+    constructor()
+
 
     @ActivateRequestContext
     fun getUserIdByUserSub(userSub: String): String? {
@@ -25,6 +28,6 @@ class UserService {
 
     @ActivateRequestContext
     fun getUserByUserId(userId: String): User? {
-        return User.fromUserEntity(userRepository.findById(userId))
+        return UserConverter.fromUserEntity(userRepository.findById(userId))
     }
 }

@@ -3,6 +3,7 @@ subprojects {
         dependencies {
             implementation(project(":saas-base"))
             implementation(project(":saas-core"))
+            implementation(project(":saas-model"))
 
             implementation("com.auth0:java-jwt:4.2.2")
             implementation("com.auth0:jwks-rsa:0.22.0")
@@ -18,6 +19,7 @@ subprojects {
             implementation(project(":saas-base"))
             implementation(project(":saas-core"))
             implementation(project(":saas-entity"))
+            implementation(project(":saas-model"))
 
             // api security
             implementation("io.quarkus:quarkus-hibernate-validator")
