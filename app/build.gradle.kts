@@ -5,7 +5,7 @@ subprojects {
             implementation(project(":saas-core"))
             implementation(project(":saas-model"))
 
-            implementation("com.auth0:java-jwt:4.2.2")
+            implementation("com.auth0:java-jwt:4.4.0")
             implementation("com.auth0:jwks-rsa:0.22.0")
             implementation("io.quarkus:quarkus-smallrye-jwt")
             compileOnly("io.quarkus:quarkus-security")
@@ -20,6 +20,7 @@ subprojects {
             implementation(project(":saas-core"))
             implementation(project(":saas-entity"))
             implementation(project(":saas-model"))
+            compileOnly("jakarta.persistence:jakarta.persistence-api:3.1.0")
 
             // api security
             implementation("io.quarkus:quarkus-hibernate-validator")
@@ -28,7 +29,6 @@ subprojects {
             implementation("io.quarkus:quarkus-config-yaml")
 
             implementation("io.quarkus:quarkus-smallrye-openapi")
-            compileOnly("org.hibernate:hibernate-core:6.2.1.Final")
         }
     }
 }

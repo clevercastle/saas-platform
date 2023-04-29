@@ -24,7 +24,7 @@ class IAMServiceAuth0(
         try {
             val createdUser = auth.signUp(email, password.toCharArray(), "Username-Password-Authentication")
                     .execute()
-            return Auth0User(createdUser.email, Auth0User.genUserSub(createdUser.userId), createdUser.userId)
+            return Auth0User(createdUser.body.email, Auth0User.genUserSub(createdUser.body.userId), createdUser.body.userId)
         } catch (e: APIException) {
             when (e.error) {
                 "invalid_password" -> {
@@ -46,14 +46,14 @@ class IAMServiceAuth0(
         val auth0TokenHolder = auth.login(email, password.toCharArray(), auth0Connection)
                 .setScope(auth0Scope)
                 .setAudience(auth0Audience).execute()
-        return TokenHolder(auth0TokenHolder.accessToken, auth0TokenHolder.idToken, auth0TokenHolder.refreshToken,
-                auth0TokenHolder.tokenType, TimeUtils.from(auth0TokenHolder.expiresAt), auth0TokenHolder.scope)
+        return TokenHolder(auth0TokenHolder.body.accessToken, auth0TokenHolder.body.idToken, auth0TokenHolder.body.refreshToken,
+                auth0TokenHolder.body.tokenType, TimeUtils.from(auth0TokenHolder.body.expiresAt), auth0TokenHolder.body.scope)
     }
 
     override fun refresh(refreshToken: String): TokenHolder {
         val auth0TokenHolder = auth.renewAuth(refreshToken).execute()
-        return TokenHolder(auth0TokenHolder.accessToken, auth0TokenHolder.idToken, auth0TokenHolder.refreshToken,
-                auth0TokenHolder.tokenType, TimeUtils.from(auth0TokenHolder.expiresAt), auth0TokenHolder.scope)
+        return TokenHolder(auth0TokenHolder.body.accessToken, auth0TokenHolder.body.idToken, auth0TokenHolder.body.refreshToken,
+                auth0TokenHolder.body.tokenType, TimeUtils.from(auth0TokenHolder.body.expiresAt), auth0TokenHolder.body.scope)
     }
 
     override fun disableUser(iamId: String) {
