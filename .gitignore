@@ -1,4 +1,5 @@
 .idea
+.aws-sam
 application-*.yml
 application-*.yaml
 # Gradle

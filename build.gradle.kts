@@ -62,17 +62,11 @@ allprojects {
         all {
             exclude(group = "ch.qos.logback", module = "logback-core")
             exclude(group = "ch.qos.logback", module = "logback-classic")
-            exclude(group = "org.apache.logging.log4j", module = "log4j-to-slf4j")
-            exclude(group = "org.jboss.logging", module = "jboss-logging")
-            exclude(group = "org.jboss.slf4j", module = "slf4j-jboss-logmanager")
         }
     }
 
     dependencies {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-        implementation("org.slf4j:slf4j-api:2.0.7")
-        implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0")
-
 
         implementation("org.apache.commons:commons-lang3:3.12.0")
 

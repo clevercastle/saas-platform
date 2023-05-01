@@ -15,12 +15,14 @@ subprojects {
     }
     if (!"common".equals(name)) {
         dependencies {
+//            implementation("io.quarkus:quarkus-amazon-lambda-http")
             implementation(project(":app:common"))
             implementation(project(":saas-base"))
             implementation(project(":saas-core"))
             implementation(project(":saas-entity"))
             implementation(project(":saas-model"))
             compileOnly("jakarta.persistence:jakarta.persistence-api:3.1.0")
+            implementation("io.quarkus:quarkus-logging-json")
 
             // api security
             implementation("io.quarkus:quarkus-hibernate-validator")

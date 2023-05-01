@@ -1,4 +1,7 @@
 quarkus:
+    log:
+        console:
+            json: false
     hibernate-orm:
         physical-naming-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
         database:
