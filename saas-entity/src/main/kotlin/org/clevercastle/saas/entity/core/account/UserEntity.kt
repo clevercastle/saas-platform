@@ -17,7 +17,7 @@ class UserEntity : BaseEntity() {
     companion object : PanacheCompanionBase<UserEntity, String>
 
     @Id
-    var id: String = IdUtil.Companion.Account.genUserId()
+    var id: String = IdUtil.Companion.AccountSystem.genUserId()
     lateinit var email: String
 }
 

@@ -22,14 +22,17 @@ class GlobalExceptionHandler : ExceptionMapper<Exception> {
             is HttpResponseException -> {
                 // Overwrite error message
                 Response.status(exception.httpStatus)
-                        .entity(ErrorResponse.Builder()
-                                .code(exception.code)
-                                .error(exception.message)
-                                .detail(exception.detail)
-                                .data(exception.data)
-                                .build())
-                        .build()
+                    .entity(
+                        ErrorResponse.Builder()
+                            .code(exception.code)
+                            .error(exception.message)
+                            .detail(exception.detail)
+                            .data(exception.data)
+                            .build()
+                    )
+                    .build()
             }
+
             else -> {
                 log.error("[Internal Server Error]", exception)
                 Response.serverError().entity("Internal Server Error").build()

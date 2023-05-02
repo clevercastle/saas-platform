@@ -21,19 +21,34 @@ class IdUtil {
             }
         }
 
-        class Account {
+        class AccountSystem {
             companion object {
                 const val user = "user_"
-                const val workspace = "workspace_"
+                const val account = "act_"
+                const val workspace = "space_"
                 const val userWorkspaceMapping = "uwm_"
+                const val department = "dept_"
+                const val team = "team_"
                 const val workspaceTeam = "wteam_"
                 const val userWorkspaceTeamMapping = "uwteam_"
                 fun genUserId(randomPart: String = UUID.randomUUID().toString()): String {
                     return "$user${randomPart}"
                 }
 
+                fun genAccountId(randomPart: String = UUID.randomUUID().toString()): String {
+                    return "$account${randomPart}"
+                }
+
                 fun genWorkspaceId(randomPart: String = UUID.randomUUID().toString()): String {
                     return "$workspace${randomPart}"
+                }
+
+                fun genDepartmentId(randomPart: String = UUID.randomUUID().toString()): String {
+                    return "$department${randomPart}"
+                }
+
+                fun genTeamId(randomPart: String = UUID.randomUUID().toString()): String {
+                    return "$team${randomPart}"
                 }
 
                 fun genWorkspaceTeamId(randomPart: String = UUID.randomUUID().toString()): String {

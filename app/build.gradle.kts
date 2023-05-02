@@ -21,8 +21,11 @@ subprojects {
             implementation(project(":saas-core"))
             implementation(project(":saas-entity"))
             implementation(project(":saas-model"))
-            compileOnly("jakarta.persistence:jakarta.persistence-api:3.1.0")
             implementation("io.quarkus:quarkus-logging-json")
+            implementation("jakarta.persistence:jakarta.persistence-api")
+            compileOnly("org.hibernate.orm:hibernate-core")
+
+            implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.0")
 
             // api security
             implementation("io.quarkus:quarkus-hibernate-validator")

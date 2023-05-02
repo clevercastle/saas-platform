@@ -12,7 +12,7 @@ class WorkspaceEntity : BaseEntity() {
     companion object : PanacheCompanionBase<WorkspaceEntity, String>
 
     @Id
-    var id: String = IdUtil.Companion.Account.genWorkspaceId()
+    var id: String = IdUtil.Companion.AccountSystem.genWorkspaceId()
     var name: String? = null
 }
 

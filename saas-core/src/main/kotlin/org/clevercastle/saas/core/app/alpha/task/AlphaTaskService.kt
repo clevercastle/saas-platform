@@ -47,7 +47,8 @@ class AlphaTaskService {
     }
 
     fun listByOwnerId(ownerId: String, projectId: String): List<AlphaTask> {
-        return alphaTaskEntityRepository.listByOwnerAndProject(ownerId, projectId).map { AlphaTaskConverter.fromEntity(it)!! }
+        return alphaTaskEntityRepository.listByOwnerAndProject(ownerId, projectId)
+            .map { AlphaTaskConverter.fromEntity(it)!! }
     }
 
     @Transactional

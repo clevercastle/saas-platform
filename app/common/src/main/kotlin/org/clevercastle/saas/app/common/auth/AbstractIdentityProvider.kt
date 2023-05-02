@@ -18,13 +18,19 @@ abstract class AbstractIdentityProvider {
     protected fun verifyJWTToken(jwtToken: String): JWTPayload {
         val decodedJWT = JWT.decode(jwtToken)
         val publicKey: RSAKey = getPublicKey(decodedJWT.keyId)
-                ?: throw RuntimeException(MessageFormat.format("Fail to get corresponding key with kid {0}", decodedJWT.keyId))
+            ?: throw RuntimeException(
+                MessageFormat.format(
+                    "Fail to get corresponding key with kid {0}",
+                    decodedJWT.keyId
+                )
+            )
         val algorithm = Algorithm.RSA256(publicKey)
         val verifier = JWT.require(algorithm).withIssuer(getIssuer()).build()
         when (getJWTPayloadClass()) {
             Auth0JWTPayload::class.java -> {
                 return Auth0JWTPayload.from(verifier.verify(jwtToken))
             }
+
             else -> TODO()
         }
     }

@@ -20,8 +20,10 @@ class UserConverter {
             }
         }
 
-        fun fromUserEntityWithWorkspace(user: UserEntity,
-                                        workspaces: List<Workspace>): User {
+        fun fromUserEntityWithWorkspace(
+            user: UserEntity,
+            workspaces: List<Workspace>
+        ): User {
             return User().apply {
                 this.id = user.id
                 this.email = user.email

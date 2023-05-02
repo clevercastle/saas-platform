@@ -8,8 +8,8 @@ import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import org.clevercastle.saas.base.IdUtil
 import org.clevercastle.saas.entity.BaseEntity
-import org.clevercastle.saas.model.core.account.UserInWorkspaceTeamRole
-import org.clevercastle.saas.model.core.account.UserInWorkspaceTeamRoleHibernateConverter
+import org.clevercastle.saas.model.core.account.AccountInWorkspaceRole
+import org.clevercastle.saas.model.core.account.AccountInWorkspaceRoleConverter
 
 
 @Entity(name = "workspace_team")
@@ -17,7 +17,7 @@ class WorkspaceTeamEntity : BaseEntity() {
     companion object : PanacheCompanionBase<WorkspaceTeamEntity, String>
 
     @Id
-    var id: String = IdUtil.Companion.Account.genWorkspaceTeamId()
+    var id: String = IdUtil.Companion.AccountSystem.genWorkspaceTeamId()
     lateinit var workspaceId: String
     lateinit var name: String
     var description: String? = null
@@ -36,14 +36,14 @@ class UserWorkspaceTeamMappingEntity : BaseEntity() {
     companion object : PanacheCompanionBase<UserWorkspaceTeamMappingEntity, String>
 
     @Id
-    var id: String = IdUtil.Companion.Account.genWorkspaceUserTeamMappingId()
+    var id: String = IdUtil.Companion.AccountSystem.genWorkspaceUserTeamMappingId()
 
     lateinit var userId: String
     lateinit var workspaceId: String
     lateinit var workspaceTeamId: String
 
-    @field:Convert(converter = UserInWorkspaceTeamRoleHibernateConverter::class)
-    lateinit var userInWorkspaceTeamRole: UserInWorkspaceTeamRole
+    @field:Convert(converter = AccountInWorkspaceRoleConverter::class)
+    lateinit var accountInWorkspaceRole: AccountInWorkspaceRole
 }
 
 @ApplicationScoped

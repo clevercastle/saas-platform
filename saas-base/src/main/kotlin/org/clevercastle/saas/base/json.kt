@@ -14,7 +14,7 @@ class JsonUtils {
             val mapper = ObjectMapper()
             try {
                 return mapper.writerWithDefaultPrettyPrinter()
-                        .writeValueAsString(obj)
+                    .writeValueAsString(obj)
             } catch (e: JsonProcessingException) {
                 logger.errorf(LogErrorCode.JsonProcessException, "Fail to convert object to json, object", e)
             }

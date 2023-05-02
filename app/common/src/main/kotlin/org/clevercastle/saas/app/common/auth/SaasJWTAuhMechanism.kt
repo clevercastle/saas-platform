@@ -32,13 +32,19 @@ class SaasJWTAuhMechanism : HttpAuthenticationMechanism {
     @Inject
     private lateinit var jwt: JWTAuthMechanism
 
-    override fun authenticate(context: RoutingContext?, identityProviderManager: IdentityProviderManager?): Uni<SecurityIdentity> {
+    override fun authenticate(
+        context: RoutingContext?,
+        identityProviderManager: IdentityProviderManager?
+    ): Uni<SecurityIdentity> {
         val headerAuthorization = context!!.request().headers().get(AUTHORIZATION_HEADER)
         if (headerAuthorization != null && headerAuthorization.startsWith(BEARER_SCHEME_PREFIX)) {
             val jwtToken = context.request().headers().get(AUTHORIZATION_HEADER).substring(BEARER_SCHEME_PREFIX.length)
             if (StringUtils.isNotBlank(jwtToken)) {
-                return identityProviderManager!!.authenticate(HttpSecurityUtils.setRoutingContextAttribute(
-                        SaasTokenAuthenticationRequest(JsonWebTokenCredential(jwtToken)), context))
+                return identityProviderManager!!.authenticate(
+                    HttpSecurityUtils.setRoutingContextAttribute(
+                        SaasTokenAuthenticationRequest(JsonWebTokenCredential(jwtToken)), context
+                    )
+                )
             }
         }
         return Uni.createFrom().optional(Optional.empty())

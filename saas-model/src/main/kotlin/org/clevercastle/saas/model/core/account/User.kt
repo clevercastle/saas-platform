@@ -1,13 +1,9 @@
 package org.clevercastle.saas.model.core.account
 
-import java.time.OffsetDateTime
+import org.clevercastle.saas.model.BaseModel
 
-class User {
+class User : BaseModel() {
     lateinit var id: String
     lateinit var email: String
     val workspaces = mutableListOf<Workspace>()
-    lateinit var createdAt: OffsetDateTime
-    lateinit var updatedAt: OffsetDateTime
-    var createdBy: String? = null
-    var updatedBy: String? = null
 }

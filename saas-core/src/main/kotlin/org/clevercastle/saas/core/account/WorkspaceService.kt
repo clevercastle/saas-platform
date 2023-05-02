@@ -2,20 +2,19 @@ package org.clevercastle.saas.core.account
 
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.inject.Inject
-import jakarta.transaction.RollbackException
 import jakarta.transaction.Transactional
 import org.clevercastle.saas.base.IdUtil
 import org.clevercastle.saas.base.TimeUtils
 import org.clevercastle.saas.core.internal.auth.SecurityService
-import org.clevercastle.saas.core.internal.exception.BadRequestException
-import org.clevercastle.saas.core.internal.exception.NotFoundException
 import org.clevercastle.saas.entity.core.account.*
-import org.clevercastle.saas.model.core.account.*
+import org.clevercastle.saas.model.core.account.Account
+import org.clevercastle.saas.model.core.account.AccountRole
+import org.clevercastle.saas.model.core.account.Workspace
 
 @ApplicationScoped
 class WorkspaceService {
     @Inject
-    private lateinit var userWorkspaceMappingEntityRepository: UserWorkspaceMappingEntityRepository
+    private lateinit var accountEntityRepository: AccountEntityRepository
 
     @Inject
     private lateinit var workspaceEntityRepository: WorkspaceEntityRepository
@@ -30,10 +29,13 @@ class WorkspaceService {
     private lateinit var securityService: SecurityService
 
     // region workspace
+    fun getWorkspace(workspaceId: String): Workspace? {
+        return WorkspaceConverter.converter.fromEntity(workspaceEntityRepository.findById(workspaceId))
+    }
 
     @Transactional
-    fun createWorkspace(userId: String, workspaceName: String, workspaceUserName: String): Workspace {
-        val workspaceId = IdUtil.Companion.Account.genWorkspaceId()
+    fun createWorkspace(userId: String, workspaceName: String, pAccountName: String): Workspace {
+        val workspaceId = IdUtil.Companion.AccountSystem.genWorkspaceId()
         val workspaceEntity = WorkspaceEntity().apply {
             this.id = workspaceId
             this.name = workspaceName
@@ -43,131 +45,36 @@ class WorkspaceService {
             this.updatedBy = this.id
         }
 
-        val userWorkspaceMappingEntity = UserWorkspaceMappingEntity().apply {
+        val accountEntity = AccountEntity().apply {
             this.userId = userId
             this.workspaceId = workspaceEntity.id
-            this.workspaceUserName = workspaceUserName
-            this.role = WorkspaceUserRole.Admin
+            this.name = pAccountName
+            this.role = AccountRole.Owner
             this.createdAt = TimeUtils.now()
             this.updatedAt = TimeUtils.now()
             this.createdBy = this.id
             this.updatedBy = this.id
         }
         workspaceEntityRepository.persist(workspaceEntity)
-        userWorkspaceMappingEntityRepository.persist(userWorkspaceMappingEntity)
-        return WorkspaceConverter.fromWorkspaceEntity(workspaceEntity)
+        accountEntityRepository.persist(accountEntity)
+        return WorkspaceConverter.converter.fromEntity(workspaceEntity)!!
     }
 
-    fun listWorkspaceUsersByUserId(userId: String): List<WorkspaceUser> {
-        val mappings = userWorkspaceMappingEntityRepository.listWorkspaces(userId)
-        val workspaces = workspaceEntityRepository.listWorkspaces(mappings.map { it.workspaceId })
-        return mappings.map { mapping ->
-            val workspace = workspaces.find { it.id == mapping.workspaceId }
-            WorkspaceUserConverter.fromEntity(mapping, workspace!!.name!!)
-        }
+    fun listAccountByUser(userId: String): List<Account> {
+        val mappings = accountEntityRepository.listAccount(userId)
+        return mappings.map { AccountConverter.converter.fromEntity(it)!! }
     }
 
-    @Transactional
-    fun joinWorkspace(userId: String, workspaceId: String, pWorkspaceUsername: String, role: WorkspaceUserRole) {
-        val userWorkspaceMappingEntity = UserWorkspaceMappingEntity().apply {
-            this.userId = userId
-            this.workspaceId = workspaceId
-            this.workspaceUserName = pWorkspaceUsername
-            this.role = role
-            this.createdAt = TimeUtils.now()
-            this.updatedAt = TimeUtils.now()
-            this.createdBy = securityService.getUserId()
-            this.updatedBy = securityService.getUserId()
-        }
-        userWorkspaceMappingEntityRepository.persist(userWorkspaceMappingEntity)
+    fun listWorkspaces(ids: List<String>): List<Workspace> {
+        return workspaceEntityRepository.listWorkspaces(ids).map { WorkspaceConverter.converter.fromEntity(it)!! }
     }
 
     @Transactional
-    fun updateWorkspace(userId: String, workspaceId: String, pWorkspaceUsername: String?, role: WorkspaceUserRole?) {
-        val userWorkspaceMappingEntity = userWorkspaceMappingEntityRepository.getByUserIdAndWorkspaceId(userId, workspaceId)
-                ?: throw NotFoundException("User is not a member of the workspace")
-        if (pWorkspaceUsername != null) {
-            userWorkspaceMappingEntity.workspaceUserName = pWorkspaceUsername
-        }
-        if (role != null) {
-            userWorkspaceMappingEntity.role = role
-        }
-        userWorkspaceMappingEntity.updatedAt = TimeUtils.now()
-        userWorkspaceMappingEntity.updatedBy = securityService.getUserId()
-        userWorkspaceMappingEntityRepository.persist(userWorkspaceMappingEntity)
+    fun joinWorkspace(userId: String, workspaceId: String, pAccountName: String, role: AccountRole) {
+
     }
 
-    fun getUserWorkspaceMapping(userId: String, workspaceId: String): UserWorkspaceMappingEntity? {
-        return userWorkspaceMappingEntityRepository.getByUserIdAndWorkspaceId(userId, workspaceId)
-    }
 
     // endregion
-
-    // region workspace team
-
-    fun listUserWorkspaceTeams(userId: String, workspaceId: String): List<UserWorkspaceTeam> {
-        val mappings = userWorkspaceTeamMappingEntityRepository.listUserWorkspaceTeamMappings(userId, workspaceId)
-        val workspaceTeams = workspaceTeamEntityRepository.listWorkspaceTeams(mappings.map { it.workspaceTeamId })
-        return workspaceTeams.map { team ->
-            val mapping = mappings.find { it.workspaceTeamId == team.id }!!
-            UserWorkspaceTeamConverter.fromEntity(team, mapping)
-        }
-    }
-
-    @Transactional
-    fun createWorkspaceTeam(userId: String, workspaceId: String, name: String, description: String?): WorkspaceTeam {
-        val workspaceTeamEntity = WorkspaceTeamEntity().apply {
-            this.workspaceId = workspaceId
-            this.name = name
-            this.description = description
-            this.createdAt = TimeUtils.now()
-            this.createdBy = userId
-            this.updatedAt = TimeUtils.now()
-            this.updatedBy = userId
-        }
-        val userWorkspaceTeamEntity = UserWorkspaceTeamMappingEntity().apply {
-            this.userId = userId
-            this.workspaceId = workspaceId
-            this.workspaceTeamId = workspaceTeamEntity.id
-            this.userInWorkspaceTeamRole = UserInWorkspaceTeamRole.Admin
-            this.createdAt = TimeUtils.now()
-            this.createdBy = userId
-            this.updatedAt = TimeUtils.now()
-            this.updatedBy = userId
-        }
-        workspaceTeamEntity.persist()
-        userWorkspaceTeamEntity.persist()
-        return WorkspaceTeamConverter.fromEntity(workspaceTeamEntity)
-    }
-
-    @Transactional
-    fun joinWorkspaceTeam(userId: String, workspaceId: String, workspaceTeamId: String, role: UserInWorkspaceTeamRole) {
-        val workspaceTeamEntity = workspaceTeamEntityRepository.findById(workspaceTeamId)
-                ?: throw NotFoundException("Workspace team not found")
-        if (workspaceTeamEntity.workspaceId != workspaceId) {
-            throw BadRequestException("Workspace team does not belong to the workspace")
-        }
-        val userWorkspaceTeamMappingEntity = UserWorkspaceTeamMappingEntity().apply {
-            this.userId = userId
-            this.workspaceId = workspaceId
-            this.workspaceTeamId = workspaceTeamId
-            this.userInWorkspaceTeamRole = role
-            this.createdAt = TimeUtils.now()
-            this.updatedAt = TimeUtils.now()
-            this.createdBy = securityService.getUserId()
-            this.updatedBy = securityService.getUserId()
-        }
-        userWorkspaceTeamMappingEntity.persist()
-    }
-
-    @Transactional
-    fun leaveWorkspaceTeam(userId: String, workspaceId: String, workspaceTeamId: String) {
-        val count = userWorkspaceTeamMappingEntityRepository.delete(userId, workspaceId, workspaceTeamId)
-        if (count > 1) {
-            throw RollbackException("More than one user workspace team mapping is deleted")
-        }
-    }
-    // endregion
-
 
 }

@@ -32,6 +32,13 @@ class AuthRegistration {
     @Alternative
     @Priority(1)
     fun iamServiceAuth0(): IAMService {
-        return IAMServiceAuth0(auth0Audience, auth0Scope, auth0Connection, auth0Domain, auth0ClientId, auth0ClientSecret)
+        return IAMServiceAuth0(
+            auth0Audience,
+            auth0Scope,
+            auth0Connection,
+            auth0Domain,
+            auth0ClientId,
+            auth0ClientSecret
+        )
     }
 }

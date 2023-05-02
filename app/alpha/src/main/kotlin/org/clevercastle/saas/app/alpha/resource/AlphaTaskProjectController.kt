@@ -30,7 +30,7 @@ class AlphaTaskProjectController {
     fun createProject(@Valid req: CreateProjectReq): AlphaTaskProject {
         securityService.getUserId()
         val createAlphaTaskProjectBO = CreateAlphaTaskProjectBO().apply {
-            this.workspaceId = securityService.getUserWorkspaceMapping().workspaceId
+            this.workspaceId = securityService.getAccount().workspaceId
             if (StringUtils.isBlank(req.teamId)) {
                 this.ownerId = securityService.getUserId()
                 this.ownerType = ResourceOwnerType.User

@@ -1,60 +1,25 @@
 package org.clevercastle.saas.model.core.account
 
-import java.time.OffsetDateTime
+import org.clevercastle.saas.model.BaseModel
 
-class Workspace {
+class Workspace : BaseModel() {
     lateinit var id: String
-    var name: String? = null
-    val userWorkspaces = mutableMapOf<String, UserWorkspaceMapping>()
-    lateinit var createdAt: OffsetDateTime
-    lateinit var updatedAt: OffsetDateTime
-    var createdBy: String? = null
-    var updatedBy: String? = null
+    lateinit var name: String
+    var accounts = mutableListOf<Account>()
 }
 
-class WorkspaceUser {
-    lateinit var userId: String
-    lateinit var workspaceId: String
-    lateinit var workspaceName: String
-    lateinit var workspaceUserName: String
-    lateinit var role: WorkspaceUserRole
-
-    lateinit var createdAt: OffsetDateTime
-    lateinit var updatedAt: OffsetDateTime
-    var createdBy: String? = null
-    var updatedBy: String? = null
-}
-
-class UserWorkspaceMapping {
-    lateinit var id: String
-    lateinit var userId: String
-    lateinit var workspaceId: String
-    lateinit var workspaceUserName: String
-    lateinit var role: WorkspaceUserRole
-
-    lateinit var createdAt: OffsetDateTime
-    lateinit var updatedAt: OffsetDateTime
-    var createdBy: String? = null
-    var updatedBy: String? = null
-}
-
-
-class WorkspaceTeam {
+class AccountGroup : BaseModel() {
     lateinit var id: String
     lateinit var workspaceId: String
     lateinit var name: String
     var description: String? = null
-    lateinit var createdAt: OffsetDateTime
-    lateinit var updatedAt: OffsetDateTime
-    var createdBy: String? = null
-    var updatedBy: String? = null
 }
 
 
-class UserWorkspaceTeam {
-    lateinit var userId: String
+class AccountWorkspaceMapping : BaseModel() {
+    lateinit var accountId: String
     lateinit var workspaceId: String
     lateinit var name: String
     var description: String? = null
-    lateinit var role: UserInWorkspaceTeamRole
+    lateinit var role: AccountInWorkspaceRole
 }

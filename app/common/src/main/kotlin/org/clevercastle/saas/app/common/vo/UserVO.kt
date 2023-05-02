@@ -5,7 +5,10 @@ import java.time.OffsetDateTime
 
 class UserVO {
     companion object {
-        fun fromUser(user: User): UserVO {
+        fun fromUser(user: User?): UserVO? {
+            if (user == null) {
+                return null
+            }
             return UserVO().apply {
                 this.id = user.id
                 this.email = user.email

@@ -1,11 +1,11 @@
 CREATE TABLE "users"
 (
-    id                   varchar(64) NOT NULL PRIMARY KEY,
-    email                text        NOT NULL,
-    created_at           timestamp,
-    updated_at           timestamp,
-    created_by           varchar(64),
-    updated_by           varchar(64)
+    id         varchar(64) NOT NULL PRIMARY KEY,
+    email      text        NOT NULL,
+    created_at timestamp,
+    updated_at timestamp,
+    created_by varchar(64),
+    updated_by varchar(64)
 );
 
 
@@ -32,22 +32,22 @@ CREATE TABLE workspace
     updated_by varchar(64)
 );
 
-CREATE TABLE user_workspace_mapping
+CREATE TABLE account
 (
-    id                  varchar(64) NOT NULL PRIMARY KEY,
-    user_id             varchar(64) NOT NULL,
-    workspace_id        varchar(64) NOT NULL,
-    "role"              varchar(32) NULL,
-    workspace_user_name text        NOT NULL, /* user name in the workspace */
-    created_at          timestamp,
-    updated_at          timestamp,
-    created_by          varchar(64),
-    updated_by          varchar(64)
+    id           varchar(64) NOT NULL PRIMARY KEY,
+    user_id      varchar(64) NOT NULL,
+    workspace_id varchar(64) NOT NULL,
+    "role"       varchar(32) NULL,
+    name         text        NOT NULL, /* user name in the workspace */
+    created_at   timestamp,
+    updated_at   timestamp,
+    created_by   varchar(64),
+    updated_by   varchar(64)
 );
 
-create unique index user_workspace_mapping_idx_user_id_workspace_id on user_workspace_mapping (user_id, workspace_id);
+create unique index account_udx_user_id_workspace_id on account (user_id, workspace_id);
 
-CREATE TABLE workspace_team
+CREATE TABLE department
 (
     id           varchar(64) NOT NULL PRIMARY KEY,
     workspace_id varchar(64) NOT NULL,
@@ -60,18 +60,45 @@ CREATE TABLE workspace_team
     updated_by   varchar(64)
 );
 
-CREATE TABLE user_workspace_team_mapping
+CREATE TABLE account_department_mapping
 (
-    id                          varchar(64) NOT NULL PRIMARY KEY,
-    user_id                     varchar(64) NOT NULL,
-    workspace_id                varchar(64) NOT NULL,
-    workspace_team_id           varchar(64) NOT NULL,
-    user_in_workspace_team_role varchar(32) NOT NULL,
-    created_at                  timestamp,
-    updated_at                  timestamp,
-    created_by                  varchar(64),
-    updated_by                  varchar(64)
+    id           varchar(64) NOT NULL PRIMARY KEY,
+    account_id   varchar(64) NOT NULL,
+    workspace_id varchar(64) NOT NULL,
+    "role"       varchar(64) NOT NULL,
+    created_at   timestamp,
+    updated_at   timestamp,
+    created_by   varchar(64),
+    updated_by   varchar(64)
 );
 
-create unique index user_workspace_team_mapping_idx_user_id_workspace_id_team_id on
-    user_workspace_team_mapping (user_id, workspace_id, workspace_team_id);
+create unique index account_department_mapping_udx_user_id_workspace_id_team_id on
+    account_department_mapping (account_id, workspace_id);
+
+CREATE TABLE team
+(
+    id           varchar(64) NOT NULL PRIMARY KEY,
+    workspace_id varchar(64) NOT NULL,
+    name         text        NOT NULL,
+    description  text        NULL,
+
+    created_at   timestamp,
+    updated_at   timestamp,
+    created_by   varchar(64),
+    updated_by   varchar(64)
+);
+
+CREATE TABLE account_team_mapping
+(
+    id         varchar(64) NOT NULL PRIMARY KEY,
+    account_id varchar(64) NOT NULL,
+    team_id    varchar(64) NOT NULL,
+    "role"     varchar(64) NOT NULL,
+    created_at timestamp,
+    updated_at timestamp,
+    created_by varchar(64),
+    updated_by varchar(64)
+);
+
+create unique index account_team_mapping_udx_user_id_workspace_id_team_id on
+    account_team_mapping (account_id, team_id);

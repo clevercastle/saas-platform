@@ -4,26 +4,46 @@ import jakarta.enterprise.context.ApplicationScoped
 import jakarta.inject.Inject
 import jakarta.ws.rs.core.Response
 import org.clevercastle.saas.core.internal.exception.HttpResponseException
-import org.clevercastle.saas.model.core.account.WorkspaceUserRole
+import org.clevercastle.saas.model.core.account.AccountRole
 
 @ApplicationScoped
 class PermissionService {
+    private lateinit var accountService: AccountService
+
+    constructor()
+
     @Inject
-    private lateinit var workspaceService: WorkspaceService
+    constructor(accountService: AccountService) {
+        this.accountService = accountService
+    }
 
-    fun canAccessWorkspace(userId: String, workspaceId: String, roles: List<WorkspaceUserRole>, throwException: Boolean = true): Boolean {
 
-        val userWorkspaceMappingEntity = workspaceService.getUserWorkspaceMapping(userId, workspaceId)
-                ?: if (throwException) {
-                    throw HttpResponseException(Response.Status.FORBIDDEN.statusCode, null, "Operator is not a member of the workspace")
-                } else {
-                    return false
-                }
-        if (roles.contains(userWorkspaceMappingEntity.role)) {
+    fun canAccessWorkspace(
+        userId: String,
+        workspaceId: String,
+        roles: List<AccountRole>,
+        throwException: Boolean = true
+    ): Boolean {
+
+        val account = accountService.getByUserAndWorkspace(userId, workspaceId)
+            ?: if (throwException) {
+                throw HttpResponseException(
+                    Response.Status.FORBIDDEN.statusCode,
+                    null,
+                    "Operator is not a member of the workspace"
+                )
+            } else {
+                return false
+            }
+        if (roles.contains(account.role)) {
             return true
         }
         if (throwException) {
-            throw HttpResponseException(Response.Status.FORBIDDEN.statusCode, null, "Operator does not have permission to do the action on this workspace")
+            throw HttpResponseException(
+                Response.Status.FORBIDDEN.statusCode,
+                null,
+                "Operator does not have permission to do the action on this workspace"
+            )
         } else {
             return false
         }

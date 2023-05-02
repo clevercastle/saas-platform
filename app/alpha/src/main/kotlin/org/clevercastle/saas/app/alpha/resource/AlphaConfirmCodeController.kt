@@ -5,6 +5,7 @@ import jakarta.inject.Inject
 import jakarta.ws.rs.*
 import jakarta.ws.rs.core.MediaType
 import org.clevercastle.saas.app.alpha.model.CreateEmailAsyncConfirmCodeReq
+import org.clevercastle.saas.app.alpha.model.CreateEmailAsyncConfirmCodeReqConverter
 import org.clevercastle.saas.core.asyncconfirm.EmailAsyncConfirmCodeService
 import org.clevercastle.saas.model.core.asyncconfirm.EmailAsyncConfirmCode
 
@@ -23,7 +24,9 @@ class AlphaConfirmCodeController {
     @POST
     @Path("")
     fun createTask(emailAsyncConfirmCode: CreateEmailAsyncConfirmCodeReq): EmailAsyncConfirmCode {
-        return emailAsyncConfirmCodeService.createCode(CreateEmailAsyncConfirmCodeReq.converter.toModel(emailAsyncConfirmCode))
+        return emailAsyncConfirmCodeService.createCode(
+            CreateEmailAsyncConfirmCodeReqConverter.converter.toModel(emailAsyncConfirmCode)
+        )
     }
 
     @GET

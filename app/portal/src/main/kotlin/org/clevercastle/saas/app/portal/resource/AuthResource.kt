@@ -46,7 +46,7 @@ class AuthResource {
             val auth = authorization.split(" ")
             if (auth.size == 2) {
                 val userAndPassword = Base64.getDecoder().decode(auth[1]).toString(Charset.defaultCharset())
-                        .split(":")
+                    .split(":")
                 if (userAndPassword.size == 2) {
                     return authService.login(userAndPassword[0], userAndPassword[1])
                 }

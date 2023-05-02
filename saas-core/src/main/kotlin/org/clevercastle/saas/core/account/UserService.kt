@@ -9,17 +9,22 @@ import org.clevercastle.saas.model.core.account.User
 
 @ApplicationScoped
 class UserService {
-    @Inject
     private lateinit var userRepository: UserEntityRepository
-
-    @Inject
     private lateinit var userOIDCMappingRepository: UserOIDCMappingRepository
-
-    @Inject
     private lateinit var workspaceService: WorkspaceService
 
     constructor()
 
+    @Inject
+    constructor(
+        userRepository: UserEntityRepository,
+        userOIDCMappingRepository: UserOIDCMappingRepository,
+        workspaceService: WorkspaceService
+    ) {
+        this.userRepository = userRepository
+        this.userOIDCMappingRepository = userOIDCMappingRepository
+        this.workspaceService = workspaceService
+    }
 
     @ActivateRequestContext
     fun getUserIdByUserSub(userSub: String): String? {
@@ -27,7 +32,7 @@ class UserService {
     }
 
     @ActivateRequestContext
-    fun getUserByUserId(userId: String): User? {
+    fun getByUserId(userId: String): User? {
         return UserConverter.fromUserEntity(userRepository.findById(userId))
     }
 }

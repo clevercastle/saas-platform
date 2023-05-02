@@ -2,239 +2,152 @@ package org.clevercastle.saas.app.portal.resource
 
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.inject.Inject
-import jakarta.persistence.PersistenceException
 import jakarta.transaction.RollbackException
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotEmpty
 import jakarta.ws.rs.*
 import jakarta.ws.rs.core.MediaType
 import jakarta.ws.rs.core.Response
-import org.clevercastle.saas.app.common.vo.UserVO
-import org.clevercastle.saas.app.common.vo.UserWorkspaceVO
-import org.clevercastle.saas.app.common.vo.WorkspaceTeamVO
-import org.clevercastle.saas.app.common.vo.WorkspaceVO
-import org.clevercastle.saas.app.portal.model.request.CreateWorkspaceReq
-import org.clevercastle.saas.app.portal.model.request.JoinWorkspaceReq
+import org.clevercastle.saas.app.common.vo.AccountVO
+import org.clevercastle.saas.app.common.vo.AccountVOConverter
+import org.clevercastle.saas.core.account.AccountService
 import org.clevercastle.saas.core.account.PermissionService
 import org.clevercastle.saas.core.account.UserService
 import org.clevercastle.saas.core.account.WorkspaceService
 import org.clevercastle.saas.core.internal.auth.SecurityService
 import org.clevercastle.saas.core.internal.exception.HttpResponseException
 import org.clevercastle.saas.core.internal.validation.EnumValidator
-import org.clevercastle.saas.model.core.account.UserInWorkspaceTeamRole
-import org.clevercastle.saas.model.core.account.UserWorkspaceTeam
-import org.clevercastle.saas.model.core.account.WorkspaceUserRole
+import org.clevercastle.saas.model.core.account.AccountRole
 
-@Path("portal")
+@Path("portal/workspace")
 @ApplicationScoped
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 class AccountResource {
-    @Inject
-    private lateinit var securityService: SecurityService
 
-    @Inject
     private lateinit var userService: UserService
-
-    @Inject
+    private lateinit var accountService: AccountService
     private lateinit var workspaceService: WorkspaceService
-
-    @Inject
+    private lateinit var securityService: SecurityService
     private lateinit var permissionService: PermissionService
 
     constructor()
 
     @Inject
     constructor(
-        securityService: SecurityService,
         userService: UserService,
+        accountService: AccountService,
         workspaceService: WorkspaceService,
+        securityService: SecurityService,
         permissionService: PermissionService
     ) {
-        this.securityService = securityService
         this.userService = userService
+        this.accountService = accountService
         this.workspaceService = workspaceService
+        this.securityService = securityService
         this.permissionService = permissionService
     }
 
-
     @GET
     @Path("account")
-    fun getAccount(): UserVO {
-        return UserVO.fromUser(userService.getUserByUserId(securityService.getUserId())!!)
-    }
-
-    @POST
-    @Path("workspace")
-    fun createWorkspace(@Valid req: CreateWorkspaceReq): WorkspaceVO {
-        val workspace =
-            workspaceService.createWorkspace(securityService.getUserId(), req.name!!, req.workspaceUserName!!)
-        return WorkspaceVO.fromWorkspace(workspace)
-    }
-
-    @GET
-    @Path("workspace")
-    fun listUserWorkspaces(): List<UserWorkspaceVO> {
-        val userId = securityService.getUserId()
-        return workspaceService.listWorkspaceUsersByUserId(userId).map { UserWorkspaceVO.fromUserWorkspace(it) }
+    fun getAccount(): AccountVO {
+        val account = securityService.getAccount()
+        val workspace = this.workspaceService.getWorkspace(account.workspaceId)
+            ?: throw HttpResponseException(Response.Status.NOT_FOUND.statusCode, "Workspace not found")
+        return AccountVOConverter.fromAccountAndWorkspace(account, workspace)
     }
 
     @PUT
-    @Path("workspace/join")
-    fun joinWorkspace(@Valid req: JoinWorkspaceReq): Response {
+    @Path("account/{accountId}")
+    fun updateAccount(
+        @PathParam("accountId") accountId: String,
+        @Valid req: UpdateAccountReq
+    ): Response {
+        if (securityService.getAccount().id != accountId) {
+            throw HttpResponseException(
+                Response.Status.FORBIDDEN.statusCode,
+                null,
+                "Operator is not a member of the workspace"
+            )
+        }
+
+        accountService.updateAccount(
+            accountId,
+            req.accountName,
+            null
+        )
+        return Response.ok().build()
+    }
+
+
+    @POST
+    @Path("/admin/account")
+    fun createAccount(
+        @Valid req: AdminCreateAccountReq
+    ): Response {
+        val workspaceId = securityService.getAccount().workspaceId
         permissionService.canAccessWorkspace(
             securityService.getUserId(),
-            req.workspaceId!!,
-            listOf(WorkspaceUserRole.Admin)
+            workspaceId,
+            listOf(AccountRole.Owner, AccountRole.Admin)
         )
+        // check req.userId is valid
+        userService.getByUserId(req.userId)
+            ?: throw HttpResponseException(httpStatus = 400, message = "Invalid user id")
         try {
-            workspaceService.joinWorkspace(
-                req.userId!!,
-                req.workspaceId,
-                req.workspaceUserName!!,
-                WorkspaceUserRole.valueOf(req.workspaceUserRole!!)
-            )
+            accountService.createAccount(req.userId, workspaceId, req.accountName, AccountRole.valueOf(req.accountRole))
         } catch (e: RollbackException) {
-            throw HttpResponseException(httpStatus = 400, message = "User is already in workspace.")
-        }
-        return Response.ok().build()
-    }
-
-    @PUT
-    @Path("workspace/{workspaceId}/user/{userId}")
-    fun updateWorkspaceUserRole(
-        @PathParam("workspaceId") workspaceId: String, @PathParam("userId") userId: String,
-        @Valid req: AdminUpdateWorkspaceUserRoleReq
-    ): Response {
-        permissionService.canAccessWorkspace(securityService.getUserId(), workspaceId, listOf(WorkspaceUserRole.Admin))
-        if (req.workspaceUserRole == null) {
-            workspaceService.updateWorkspace(userId, workspaceId, req.workspaceUserName, null)
-        } else {
-            workspaceService.updateWorkspace(
-                userId,
-                workspaceId,
-                req.workspaceUserName,
-                WorkspaceUserRole.valueOf(req.workspaceUserRole)
-            )
-        }
-        return Response.ok().build()
-    }
-
-    @GET
-    @Path("workspace/{workspaceId}/team")
-    fun getWorkspaceTeam(@PathParam("workspaceId") workspaceId: String): List<UserWorkspaceTeam> {
-        val userWorkspaceMapping = securityService.getUserWorkspaceMapping()
-        if (userWorkspaceMapping.workspaceId != workspaceId) {
-            throw HttpResponseException(
-                httpStatus = Response.Status.BAD_REQUEST.statusCode,
-                message = "The workspace id in path is not correct"
-            )
-        }
-        return workspaceService.listUserWorkspaceTeams(securityService.getUserId(), userWorkspaceMapping.workspaceId)
-    }
-
-    @POST
-    @Path("workspace/{workspaceId}/team")
-    fun createWorkspaceTeam(
-        @PathParam("workspaceId") workspaceId: String,
-        @Valid req: CreateWorkspaceTeamReq
-    ): WorkspaceTeamVO {
-        val userWorkspaceMapping = securityService.getUserWorkspaceMapping()
-        if (userWorkspaceMapping.workspaceId != workspaceId) {
-            throw HttpResponseException(
-                httpStatus = Response.Status.BAD_REQUEST.statusCode,
-                message = "The workspace id in path is not correct"
-            )
-        }
-        val workspaceTeam = workspaceService.createWorkspaceTeam(
-            securityService.getUserId(), userWorkspaceMapping.workspaceId,
-            req.name!!, req.description
-        )
-        return WorkspaceTeamVO.fromWorkspaceTeam(workspaceTeam)
-    }
-
-    /**
-     * Join a workspace team
-     */
-    @PUT
-    @Path("workspace/{workspaceId}/team/join")
-    fun joinWorkspaceTeam(@PathParam("workspaceId") workspaceId: String, @Valid req: JoinWorkspaceTeamReq): Response {
-        // TODO: check the operator is the admin of the team  or the admin of the workspace
-        val userWorkspaceMapping = securityService.getUserWorkspaceMapping()
-        if (userWorkspaceMapping.workspaceId != workspaceId) {
-            throw HttpResponseException(
-                httpStatus = Response.Status.BAD_REQUEST.statusCode,
-                message = "The workspace id in path is not correct"
-            )
-        }
-        try {
-            workspaceService.joinWorkspaceTeam(
-                req.userId!!,
-                userWorkspaceMapping.workspaceId,
-                req.workspaceTeamId!!,
-                req.role
-            )
-        } catch (e: RollbackException) {
-            when (e.cause?.javaClass) {
-                PersistenceException::class.java -> {
-                    throw HttpResponseException(httpStatus = 400, message = "User is already in workspace team.")
-                }
-                else -> {
-                    throw HttpResponseException(httpStatus = 500, message = "")
-                }
+            if (e.cause is org.hibernate.exception.ConstraintViolationException) {
+                throw HttpResponseException(httpStatus = 400, message = "User is already in workspace.")
             }
+            throw HttpResponseException(httpStatus = 500, message = "Fail to create the account")
         }
         return Response.ok().build()
     }
 
-    /**
-     * Join a workspace team
-     */
     @PUT
-    @Path("workspace/{workspaceId}/team/{workspaceTeamId}/leave")
-    fun leaveWorkspaceTeam(
-        @PathParam("workspaceId") workspaceId: String,
-        @PathParam("workspaceTeamId") workspaceTeamId: String, @Valid req: LeaveWorkspaceTeamReq
+    @Path("/admin/account/{accountId}")
+    fun adminUpdateAccount(
+        @PathParam("accountId") accountId: String,
+        @Valid req: AdminUpdateAccountReq
     ): Response {
-        // TODO: check the operator is the admin of the team  or the admin of the workspace
-        val userWorkspaceMapping = securityService.getUserWorkspaceMapping()
-        if (userWorkspaceMapping.workspaceId != workspaceId) {
-            throw HttpResponseException(
-                httpStatus = Response.Status.BAD_REQUEST.statusCode,
-                message = "The workspace id in path is not correct"
+        val workspaceId = securityService.getAccount().workspaceId
+        permissionService.canAccessWorkspace(
+            securityService.getUserId(),
+            workspaceId,
+            listOf(AccountRole.Owner, AccountRole.Admin)
+        )
+        if (req.accountRole == null) {
+            accountService.updateAccount(accountId, req.accountName, null)
+        } else {
+            accountService.updateAccount(
+                accountId,
+                req.accountName,
+                AccountRole.valueOf(req.accountRole)
             )
         }
-        workspaceService.leaveWorkspaceTeam(
-            req.userId!!,
-            securityService.getUserWorkspaceMapping().workspaceId,
-            workspaceTeamId
-        )
         return Response.ok().build()
     }
+
+
 }
 
-class CreateWorkspaceTeamReq {
-    @field:NotEmpty(message = "Team name is required")
-    var name: String? = null
-    var description: String? = null
-}
-
-class JoinWorkspaceTeamReq {
+data class AdminCreateAccountReq(
     @field:NotEmpty(message = "UserId is required")
-    var userId: String? = null
+    val userId: String,
+    @field:EnumValidator(AccountRole::class, message = "Invalid role", method = "name")
+    val accountRole: String,
+    val accountName: String
+)
 
-    @field:NotEmpty(message = "Workspace team id is required")
-    var workspaceTeamId: String? = null
-    var role: UserInWorkspaceTeamRole = UserInWorkspaceTeamRole.ReadOnlyUser
-}
 
-class LeaveWorkspaceTeamReq {
-    @field:NotEmpty(message = "UserId is required")
-    var userId: String? = null
-}
+data class AdminUpdateAccountReq(
+    @field:EnumValidator(AccountRole::class, message = "Invalid role", method = "name")
+    val accountRole: String?,
+    val accountName: String?
+)
 
-class AdminUpdateWorkspaceUserRoleReq(
-    @field:EnumValidator(WorkspaceUserRole::class, message = "Invalid role", method = "name")
-    val workspaceUserRole: String?,
-    val workspaceUserName: String?
+data class UpdateAccountReq(
+    @field:NotEmpty(message = "Name is required")
+    val accountName: String?
 )

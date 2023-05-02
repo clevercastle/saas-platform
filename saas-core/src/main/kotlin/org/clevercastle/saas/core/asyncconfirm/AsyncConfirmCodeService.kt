@@ -23,7 +23,12 @@ class AsyncConfirmCodeService {
     }
 
     fun getByCode(code: String, codeType: AsyncConfirmCode.CodeType): AsyncConfirmCode? {
-        return AsyncConfirmCodeConverter.converter.fromEntity(asyncConfirmCodeEntityRepository.getByCodeAndType(code, codeType))
+        return AsyncConfirmCodeConverter.converter.fromEntity(
+            asyncConfirmCodeEntityRepository.getByCodeAndType(
+                code,
+                codeType
+            )
+        )
     }
 
 }

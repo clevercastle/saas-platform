@@ -31,7 +31,7 @@ class AlphaTaskController {
     @Path("task")
     fun createTask(@PathParam("projectId") projectId: String, @Valid req: CreateTaskReq): AlphaTask {
         val createAlphaTaskBO = CreateAlphaTaskBO().apply {
-            this.workspaceId = securityService.getUserWorkspaceMapping().workspaceId
+            this.workspaceId = securityService.getAccount().workspaceId
             if (StringUtils.isBlank(req.teamId)) {
                 this.ownerId = securityService.getUserId()
                 this.ownerType = ResourceOwnerType.User

@@ -43,7 +43,10 @@ class SaasAuth0IdentityProvider : IdentityProvider<SaasTokenAuthenticationReques
         return Auth0JWTPayload::class.java
     }
 
-    override fun authenticate(request: SaasTokenAuthenticationRequest, context: AuthenticationRequestContext): Uni<SecurityIdentity> {
+    override fun authenticate(
+        request: SaasTokenAuthenticationRequest,
+        context: AuthenticationRequestContext
+    ): Uni<SecurityIdentity> {
         val context = request.attributes[HttpSecurityUtils.ROUTING_CONTEXT_ATTRIBUTE] as RoutingContext
         val workspaceId: String? = context.request().headers().get(WORKSPACE_ID_HEADER)
         val jwtToken = request.token
@@ -53,22 +56,23 @@ class SaasAuth0IdentityProvider : IdentityProvider<SaasTokenAuthenticationReques
             is Auth0JWTPayload -> {
                 userSub = jwtPayload.sub
             }
+
             else -> TODO()
         }
         return Uni.createFrom().item { userService.getUserIdByUserSub(jwtPayload.sub) }
-                .runSubscriptionOn(Infrastructure.getDefaultWorkerPool())
-                .onItem()
-                .transform(Unchecked.function { it ->
-                    if (it == null) {
-                        throw RuntimeException("User not found")
-                    }
-                    QuarkusSecurityIdentity.builder()
-                            .setPrincipal(SaasPrincipal(it, userSub, workspaceId))
-                            .addRole(defaultRole)
-                            .addCredential(jwtToken)
-                            .setAnonymous(false)
-                            .build();
-                })
+            .runSubscriptionOn(Infrastructure.getDefaultWorkerPool())
+            .onItem()
+            .transform(Unchecked.function { it ->
+                if (it == null) {
+                    throw RuntimeException("User not found")
+                }
+                QuarkusSecurityIdentity.builder()
+                    .setPrincipal(SaasPrincipal(it, userSub, workspaceId))
+                    .addRole(defaultRole)
+                    .addCredential(jwtToken)
+                    .setAnonymous(false)
+                    .build();
+            })
     }
 
     override fun getIssuer(): String {

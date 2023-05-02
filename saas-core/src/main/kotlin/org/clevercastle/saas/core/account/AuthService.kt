@@ -27,10 +27,10 @@ class AuthService {
 
     @Inject
     constructor(
-            userRepository: UserEntityRepository,
-            userOIDCMappingRepository: UserOIDCMappingRepository,
-            workspaceService: WorkspaceService,
-            iamService: IAMService
+        userRepository: UserEntityRepository,
+        userOIDCMappingRepository: UserOIDCMappingRepository,
+        workspaceService: WorkspaceService,
+        iamService: IAMService
     ) {
         this.userRepository = userRepository
         this.userOIDCMappingRepository = userOIDCMappingRepository
